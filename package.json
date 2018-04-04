@@ -8,12 +8,25 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "vue": "^2.5.13"
+    "audio-recorder-polyfill-kaliatech": "^0.1.2",
+    "babel-polyfill": "^6.26.0",
+    "npm": "^5.8.0",
+    "vue": "^2.5.13",
+    "vue-router": "^3.0.1",
+    "vuetify": "^1.0.10"
   },
   "devDependencies": {
+    "@vue/cli": "^3.0.0-beta.6",
     "@vue/cli-plugin-babel": "^3.0.0-beta.6",
     "@vue/cli-plugin-eslint": "^3.0.0-beta.6",
     "@vue/cli-service": "^3.0.0-beta.6",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
     "vue-template-compiler": "^2.5.13"
   },
   "babel": {
