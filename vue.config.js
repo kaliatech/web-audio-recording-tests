@@ -5,11 +5,16 @@ module.exports = {
     disableHostCheck: true,
     port: 8443
   },
-  configureWebpack: {
-    // entry: {
-    //   polyfillstest: './src/polyfill-mediarecorder.js'
-    // }
+  configureWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      config.output.publicPath = ''
+    }
   },
+  // configureWebpack: {
+  //   entry: {
+  //      polyfillstest: './src/polyfill-mediarecorder.js'
+  //   }
+  // },
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   chainWebpack: config => {

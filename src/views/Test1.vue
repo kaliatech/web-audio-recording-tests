@@ -117,12 +117,12 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/kaliatech/audio-recorder-polyfill">https://github.com/kaliatech/audio-recorder-polyfill</a>
+          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test1.vue">src/views/Test1.vue</a>
             <ul class="ml-3">
-              <li>Primarily: <a href="#">RecorderService.js</a></li>
+              <li>Primarily: <a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a></li>
             </ul>
           </li>
-          <li><a href="https://github.com/kaliatech/audio-recorder-polyfill">https://github.com/kaliatech/audio-recorder-polyfill</a>
+          <li><a href="https://github.com/kaliatech/audio-recorder-polyfill">https://github.com/kaliatech/audio-recorder-polyfill</a> - Hacked for iOS/Safari support
           </li>
         </ul>
       </div>

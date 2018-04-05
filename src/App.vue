@@ -63,15 +63,23 @@
               <v-list-tile-title>5 - Upload to S3</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+          <v-list-tile href="https://github.com/kaliatech/web-audio-recording-tests">
+            <v-list-tile-action>
+              <v-icon>code</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>View on Github</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
         </v-list>
       </v-navigation-drawer>
       <v-toolbar color="grey" dark fixed app>
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <v-toolbar-title>Web Audio Tests</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-toolbar-items class="hidden-sm-and-down">
-          <v-btn>View on Github</v-btn>
-        </v-toolbar-items>
+        <a href="https://github.com/kaliatech/web-audio-recording-tests">
+        <v-icon large>code</v-icon>
+        </a>
       </v-toolbar>
       <v-content>
         <v-container fluid class="scroll-container">
@@ -80,11 +88,6 @@
           </div>
         </v-container>
       </v-content>
-      <!--<v-footer color="indigo" app>-->
-      <!--<v-container fluid>-->
-      <!--<span class="white&#45;&#45;text">&copy; 2017</span>-->
-      <!--</v-container>-->
-      <!--</v-footer>-->
     </v-app>
   </div>
 </template>
