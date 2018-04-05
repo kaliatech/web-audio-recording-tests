@@ -10,6 +10,8 @@ class RecorderService {
     }
 
     this.em = document.createDocumentFragment()
+
+    this.stopTracksAndCloseCtxWhenFinished = false
   }
 
   startRecording () {
@@ -71,12 +73,14 @@ class RecorderService {
       // This removes the red bar in iOS/Safari. This works correctly in all cases _except_ that if iOS
       // sleep/lock/switch occurs, then often subsequent recordings will be empty until new tab is loaded. If track
       // is not stopped, then things usually still work after sleep/lock/switch, but the red bar never goes away.
+      // These options are mutually exclusive, and both have significant consequences.
+      if (this.stopTracksAndCloseCtxWhenFinished) {
+        this.micAudioStream.getTracks().forEach((track) => track.stop())
+        this.micAudioStream = null
 
-      // this.micAudioStream.getTracks().forEach((track) => track.stop())
-      // this.micAudioStream = null
-      //
-      // this.audioCtx.close()
-      // this.audioCtx = null
+        this.audioCtx.close()
+        this.audioCtx = null
+      }
 
       this.em.dispatchEvent(new CustomEvent('recording', {detail: {recording: recording}}))
     }

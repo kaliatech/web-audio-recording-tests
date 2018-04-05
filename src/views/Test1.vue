@@ -13,6 +13,10 @@
         </div>
       </div>
     </v-layout>
+    <v-layout row wrap class="ml-1 mt-1">
+      <v-checkbox v-model="cleanupWhenFinished"
+                  label="Stop tracks and close audio context when recording stopped"></v-checkbox>
+    </v-layout>
     <v-layout column wrap v-if="recordings.length > 0">
       <h4 class="mt-3">Recordings</h4>
       <div v-for="(recording,idx) in recordings" :key="recording.ts">
@@ -68,30 +72,26 @@
           <li><strong>Red recording bar indicator</strong> - <br>
             <p>
               After granting permission to microphone, iOS/Safari will show a red bar notification anytime user switches
-              away from the tab where permission was granted. To remove this bar, the recording stream's tracks must be
-              stopped after recording is finished. Stopping the tracks (and closing the audio context) is
-              straightforward and works well, except for this last issue:
+              away from the tab where permission was granted. To clear this bar, the recording stream's tracks can be
+              stopped after recording is finished. This can be tested with the checkbox above. Stopping the tracks and
+              closing the audio context is straightforward and works well, except for this last issue:
             </p>
           </li>
           <li><strong>A sleep/lock/switch event can easily break things, is not detectable, and is not easily
             recoverable</strong> - <br>
             <p>
-              To see this using the demo above, uncomment the four lines in
-              <code>RecordingService._onDataAvailable</code> related
-              to stopping the track and closing the audio context. With those lines active, when recording is stopped
-              the red bar will go away and the microphone icon in the Safari address bar will go away. Then, press
-              home key and start the mail app. Then switch back to safari and try to make another recording. Most
-              of the time the recording will appear to work, but the audio will be silent. As far as I can tell, there
-              is no way to
-              detect
-              this, and there is no way to recover without loading a new tab or force quitting Safari.
+              To see this, make a recording and verify it plays. Switch to mail app, then back to safari and make/verify
+              another recording. As long as red bar/microphone is still visible, it generally works. Then, check the
+              option to stop tracks and close audio context. Make another recording and verify. Switch to mail app and
+              back and try to make another recording. Most of the time the recording will appear to work, but the audio
+              will be silent. As far as I can tell, there is no way to detect this, and there is no way to recover
+              without loading a new tab or force quitting Safari.
             </p>
             <p><em>If</em> the tracks are not stopped and so the red bar/icon remains, then this occurs much less
-              frequently. Of course, that means the red bar is constantly visible though. And, even in this
-              scenario, starting another app that uses the microphone will almost always break things again. I have
-              not been able to find a way to detect, much less, programmatically fix things, when this occurs. My
-              assumption is that the underlying issue is due to low level iOS/Safari bugs, and not in how this code is setting
-              things up.</p>
+              frequently. Of course, that means the red bar is constantly visible though. And even then, starting
+              another app that uses the microphone will almost always break things again. I have not been able to find a
+              way to detect, much less, programmatically fix things, when this occurs. My assumption is that the
+              underlying issue is due to low level iOS/Safari bugs, and not in how this code is setting things up.</p>
           </li>
         </ul>
       </div>
@@ -119,10 +119,13 @@
         <ul>
           <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test1.vue">src/views/Test1.vue</a>
             <ul class="ml-3">
-              <li>Primarily: <a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a></li>
+              <li>Primarily: <a
+                href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a>
+              </li>
             </ul>
           </li>
-          <li><a href="https://github.com/kaliatech/audio-recorder-polyfill">https://github.com/kaliatech/audio-recorder-polyfill</a> - Hacked for iOS/Safari support
+          <li><a href="https://github.com/kaliatech/audio-recorder-polyfill/commit/79928f917fab99f8b458ef04ca816fbc905e03c5">https://github.com/kaliatech/audio-recorder-polyfill/tree/issue-4-ios-safari-hack</a>
+            - Hacked for iOS/Safari support
           </li>
         </ul>
       </div>
@@ -146,11 +149,18 @@ export default {
     return {
       recordingInProgress: false,
       supportedMimeTypes: [],
-      recordings: []
+      recordings: [],
+      cleanupWhenFinished: false
     }
   },
   created () {
+    recorderSrvc.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
     recorderSrvc.em.addEventListener('recording', (evt) => this.onNewRecording(evt))
+  },
+  watch: {
+    cleanupWhenFinished (val) {
+      recorderSrvc.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
+    }
   },
   methods: {
     startRecording () {

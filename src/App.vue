@@ -31,6 +31,7 @@
               <v-list-tile-title>1 - Repeatable Recording</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+ <!--
           <v-list-tile to="/test2">
             <v-list-tile-action>
               <v-icon>mic</v-icon>
@@ -55,7 +56,7 @@
               <v-list-tile-title>4 - With In-Browser Encoding</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile>
+          <v-list-tile to="/test5">
             <v-list-tile-action>
               <v-icon>file_upload</v-icon>
             </v-list-tile-action>
@@ -63,6 +64,7 @@
               <v-list-tile-title>5 - Upload to S3</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+-->
           <v-list-tile href="https://github.com/kaliatech/web-audio-recording-tests">
             <v-list-tile-action>
               <v-icon>code</v-icon>
