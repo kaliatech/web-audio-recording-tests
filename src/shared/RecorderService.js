@@ -1,130 +1,95 @@
+import utils from '@/shared/Utils'
 
-// const isEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob)
-// const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-
-class WebAudioService {
+class RecorderService {
   constructor () {
     window.AudioContext = window.AudioContext || window.webkitAudioContext
+
+    // Use psuedo polyfill when needed (Edge and Safari)
+    if (!window.MediaRecorder) {
+      window.MediaRecorder = require('audio-recorder-polyfill-kaliatech')
+    }
+
+    this.em = document.createDocumentFragment()
   }
 
-  // returns promise
-  checkSupportAndRequestPermission () {
-    // RT-3600 - Uncommenting this will result in silent audio on ios/safari, after the first recording,
-    // until page is reloaded. iOS seemingly requires new audiostream for each getUserMedia.
-    // if (this.audioStream) {
-    //   return Promise.resolve(true)
-    // }
+  startRecording () {
+    if (!this.audioCtx) {
+      this.audioCtx = new AudioContext()
+    }
 
-    let mediaConstraints = {
+    // On iOS safari, must create the processor in the user click ctx before the getUserMedia
+    if (utils.isIosSafari()) {
+      this.processor = this.audioCtx.createScriptProcessor(2048, 1, 1)
+    }
+
+    // This will prompt user for permission if needed
+    const mediaConstraints = {
       audio: true
     }
-
     return navigator.mediaDevices.getUserMedia(mediaConstraints)
       .then((stream) => {
-        this.audioStream = stream
-        return Promise.resolve(true)
-      })
-      .catch((error) => {
-        console.log('Error with getUserMedia:', error)
-        return Promise.reject(error)
+        this._startRecordingWithStream(stream)
       })
   }
 
-  addListenerStateChange (cb) {
-    this.stateChangeCallbacks.push(cb)
-  }
+  _startRecordingWithStream (stream) {
+    this.micAudioStream = stream
 
-  _onStateChange (state) {
-    // console.log('_onStateChange', state) // recording, paused, stopped or inactive
-    if (state === 'recording') {
-      this.lastStartTime = new Date()
+    this.mediaRecorder = new MediaRecorder(this.micAudioStream)
+    this.mediaRecorder.addEventListener('dataavailable', (evt) => this._onDataAvailable(evt))
+    this.mediaRecorder.addEventListener('error', (evt) => this._onError(evt))
+
+    // On iOS/Safari, we must pass in an audioCtx and scriptProcessor that were created in the user click ctx
+    if (utils.isIosSafari()) {
+      this.mediaRecorder.start(null, this.audioCtx, this.processor)
     }
     else {
-      this._appendElapsedDurationAndReset()
+      this.mediaRecorder.start()
     }
-
-    this.stateChangeCallbacks.forEach(it => it(state))
   }
 
-  // Note that this might never return if user does not accept or decline the prompt.
-  startRecording () {
-    const options = {
-      disableLogs: false, // false seems to be the default. Useful to leave logging on for now.
-      type: 'audio'
-    }
-    this.recordRTC = RecordRTC(this.audioStream, options)
-    this.recordRTC.onStateChanged = (state) => this._onStateChange(state)
-
-    // Using init is probably not required for just audio, but seems safer
-    // However, even though docs show this, it causes stackoverflow
-    // this.recordRTC.initRecorder(() => {
-
-    this.resetRecording()
-    this.recordRTC.startRecording()
-  }
-
-  pauseRecording () {
-    this.recordRTC.pauseRecording()
-  }
-
-  resumeRecording () {
-    this.recordRTC.resumeRecording()
-  }
-
-  stopRecording (callback) {
-    if (!this.recordRTC) {
-      return
-    }
-
-    // Don't call stop if already stopped. Doing so seems to result in no stop callback.
-    if (this.recordRTC.state && this.recordRTC.state === 'stopped') {
-      if (typeof callback === 'function') {
-        callback()
-      }
-      return
-    }
-
-    this.recordRTC.stopRecording((audioURL) => {
-      this.recordedAudioUrl = audioURL
-      this.recordedBlob = this.recordRTC.getBlob()
-      if (typeof callback === 'function') {
-        callback()
+  _onDataAvailable (evt) {
+    // Single blob at end for now, though this limits length of recording
+    if (this.mediaRecorder.state === 'inactive') {
+      let blobUrl = URL.createObjectURL(evt.data)
+      const recording = {
+        ts: new Date().getTime(),
+        blobUrl: blobUrl,
+        mimeType: evt.data.type,
+        size: evt.data.size
       }
 
-      // This clears the red bar in ios when switching to other apps
-      if (this.audioStream && this.audioStream.getAudioTracks().length > 0) {
-        this.audioStream.getTracks()[0].stop()
+      if (this.processor) {
+        this.processor.disconnect()
+        this.processor = null
       }
 
-      // and/or
-      // audio.src = audioURL
-      // and/or (but this generates security warning in Edge and a security block)
-      // this.recordRTC.getDataURL(function (dataURL) {
-      //   // console.log('dataURL', dataURL)
-      // })
-    })
+      if (this.mediaRecorder.destroy) {
+        this.mediaRecorder.destroy()
+      }
+
+      // This removes the red bar in iOS/Safari. This works correctly in all cases _except_ that if iOS
+      // sleep/lock/switch occurs, then often subsequent recordings will be empty until new tab is loaded. If track
+      // is not stopped, then things usually still work after sleep/lock/switch, but the red bar never goes away.
+
+      // this.micAudioStream.getTracks().forEach((track) => track.stop())
+      // this.micAudioStream = null
+      //
+      // this.audioCtx.close()
+      // this.audioCtx = null
+
+      this.em.dispatchEvent(new CustomEvent('recording', {detail: {recording: recording}}))
+    }
   }
 
-  resetRecording () {
-    if (!this.recordRTC) {
-      return
-    }
-
-    // Not sure if this is necessary or safe. It should never be triggered in normal flow.
-    if (this.recordRTC.state !== 'inactive') {
-      this.recordRTC.clearRecordedData()
-    }
-
-    this.recordedDurationMs = 0
-    this.lastStartTime = null
+  _onError (evt) {
+    console.log('error', evt)
+    this.em.dispatchEvent(new Event('error'))
+    alert('error:' + evt) // for debugging purposes
   }
 
-  _appendElapsedDurationAndReset () {
-    if (!this.lastStartTime) {
-      return
-    }
-    this.recordedDurationMs = this.recordedDurationMs + (new Date().getTime() - this.lastStartTime.getTime())
-    this.lastStartTime = null
+  stopRecording () {
+    this.mediaRecorder.stop()
   }
 }
 

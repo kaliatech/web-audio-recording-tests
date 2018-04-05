@@ -68,6 +68,10 @@
       <v-toolbar color="grey" dark fixed app>
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <v-toolbar-title>Web Audio Tests</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn>View on Github</v-btn>
+        </v-toolbar-items>
       </v-toolbar>
       <v-content>
         <v-container fluid class="scroll-container">
