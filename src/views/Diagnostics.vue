@@ -14,7 +14,7 @@
           <li><span class="lbl">webkitAudioContext</span> : <span class="val">{{ webkitAudioContextStr }}</span>
           <li><span class="lbl">MediaRecorder</span> : <span class="val">{{ mediaRecorderOrigStr }}</span>
           <li><span class="lbl">MediaRecorder(Polyfilled)</span> : <span
-            class="val">{{ mediaRecorderPoly }}</span>
+            class="val">{{ mediaRecorderPolyfilled }}</span>
           </li>
         </ul>
       </v-flex>
@@ -59,7 +59,7 @@ export default {
     return {
       supportedMimeTypes: [],
       mediaRecorderOrigStr: typeof window.MediaRecorder,
-      mediaRecorderPoly: ''
+      mediaRecorderPolyfilled: 'false'
     }
   },
   computed: {
@@ -88,9 +88,6 @@ export default {
       'video/webm;codecs=vp9',
       'video/webm;codecs=h264',
       'video/mp4']
-
-    let MediaRecorder = require('audio-recorder-polyfill-kaliatech')
-    this.mediaRecorderPoly = !MediaRecorder.notSupported
 
     for (const i in types) {
       if (MediaRecorder && MediaRecorder.isTypeSupported) {

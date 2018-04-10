@@ -8,7 +8,6 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "audio-recorder-polyfill-kaliatech": "git+https://github.com/kaliatech/audio-recorder-polyfill.git#issue-4-ios-safari-hack",
     "babel-polyfill": "^6.26.0",
     "npm": "^5.8.0",
     "vue": "^2.5.13",

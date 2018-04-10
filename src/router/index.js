@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home'
 import Diagnostics from '@/views/Diagnostics'
 import Test1 from '@/views/Test1'
+import Test2 from '@/views/Test2'
 
 Vue.use(VueRouter)
 
@@ -24,6 +25,11 @@ const router = new VueRouter({
       path: '/test1',
       name: 'test1',
       component: Test1
+    },
+    {
+      path: '/test2',
+      name: 'test2',
+      component: Test2
     }
   ]
 })

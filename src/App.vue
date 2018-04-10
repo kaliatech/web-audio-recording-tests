@@ -31,8 +31,8 @@
               <v-list-tile-title>1 - Repeatable Recording</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
- <!--
-          <v-list-tile to="/test2">
+<!--
+           <v-list-tile to="/test2">
             <v-list-tile-action>
               <v-icon>mic</v-icon>
             </v-list-tile-action>

@@ -4,13 +4,17 @@ import Vuetify from 'vuetify'
 import App from './App.vue'
 import router from '@/router/index.js'
 
-import colors from 'vuetify/es5/util/colors'
+// import colors from 'vuetify/es5/util/colors'
 
 Vue.use(Vuetify, {
   theme: {
-    primary: colors.grey.darken1,
-    secondary: colors.grey.lighten4,
-    accent: colors.grey.base
+    primary: '#546E7A',
+    secondary: '#B0BEC5',
+    accent: '#448AFF',
+    error: '#EF5350',
+    warning: '#FFF176',
+    info: '#2196f3',
+    success: '#4caf50'
   }
 })
 
