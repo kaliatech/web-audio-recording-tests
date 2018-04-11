@@ -15,23 +15,25 @@
             <v-btn color="info" to="/diagnostics">Browser Diagnostics</v-btn>
           </div>
           <div>
-            <v-btn color="info" to="/test1">1 - Recording and Playback</v-btn>
+            <v-btn color="info" to="/test1">1 - Repeatable Audio Recording</v-btn>
           </div>
-<!--
           <div>
             <v-btn color="info" to="/test2">2 - Audio Process Events</v-btn>
           </div>
-
+          <div>
+            <v-btn color="info" to="/test3">3 - With 2nd Script Processor</v-btn>
+          </div>
+          <!--
           <div>
             <v-btn color="info" to="/test3">3 - Microphone Selection</v-btn>
           </div>
-          <div>
-            <v-btn color="info" to="/test4">4 - In-Browser Encoding</v-btn>
-          </div>
-          <div>
-            <v-btn color="info" to="/test5">5 - Upload to S3</v-btn>
-          </div>
--->
+                    <div>
+                      <v-btn color="info" to="/test4">4 - In-Browser Encoding</v-btn>
+                    </div>
+                    <div>
+                      <v-btn color="info" to="/test5">5 - Upload to S3</v-btn>
+                    </div>
+          -->
         </div>
       </v-flex>
       <v-flex md3>

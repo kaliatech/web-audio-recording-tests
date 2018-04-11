@@ -28,10 +28,10 @@
               <v-icon>mic</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>1 - Repeatable Recording</v-list-tile-title>
+              <v-list-tile-title>1 - Repeatable Audio Recording</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-<!--
+
            <v-list-tile to="/test2">
             <v-list-tile-action>
               <v-icon>mic</v-icon>
@@ -40,6 +40,16 @@
               <v-list-tile-title>2 - With Audio Process Events</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+
+          <v-list-tile to="/test3">
+            <v-list-tile-action>
+              <v-icon>mic</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>3 - With 2nd Script Processor</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+ <!--
           <v-list-tile to="/test3">
             <v-list-tile-action>
               <v-icon>mic</v-icon>
@@ -85,7 +95,7 @@
       </v-toolbar>
       <v-content>
         <v-container fluid class="scroll-container">
-          <div>
+          <div mb-5>
             <router-view></router-view>
           </div>
         </v-container>

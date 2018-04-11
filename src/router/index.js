@@ -5,6 +5,7 @@ import Home from '@/views/Home'
 import Diagnostics from '@/views/Diagnostics'
 import Test1 from '@/views/Test1'
 import Test2 from '@/views/Test2'
+import Test3 from '@/views/Test3'
 
 Vue.use(VueRouter)
 
@@ -30,7 +31,13 @@ const router = new VueRouter({
       path: '/test2',
       name: 'test2',
       component: Test2
+    },
+    {
+      path: '/test3',
+      name: 'test3',
+      component: Test3
     }
+
   ]
 })
 

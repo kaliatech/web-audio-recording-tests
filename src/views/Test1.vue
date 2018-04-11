@@ -1,8 +1,12 @@
 <template>
-  <v-container>
+  <v-container mb-5>
     <v-layout row wrap>
       <div class="test1">
-        <h3>Repeatable Recording &amp; Playback</h3>
+        <h3>Test 1
+          <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
+          <span v-if="!$vuetify.breakpoint.xsOnly"> - </span>
+          Repeatable Recording &amp; Playback
+        </h3>
         <p>Click start/stop multiple times to create multiple recordings. Works on all modern browser/device
           combinations, including iOS/Safari 11.2.x and newer.</p>
         <div>
@@ -12,6 +16,16 @@
           <v-icon :class="recordingInProgress ? 'live' : ''">mic</v-icon>
         </div>
       </div>
+    </v-layout>
+    <v-layout row wrap class="ml-1 mt-1">
+      <v-flex xs10 md6>
+        <v-slider label="Mic Gain" :max="500" v-model="micGainSlider"></v-slider>
+      </v-flex>
+      <v-flex xs2>
+        <div class="input-group">
+          <label>{{ micGain }}</label>
+        </div>
+      </v-flex>
     </v-layout>
     <v-layout row wrap class="ml-1 mt-1">
       <v-checkbox v-model="cleanupWhenFinished"
@@ -116,21 +130,6 @@
     </v-layout>
 
     <v-layout column wrap>
-      <h4 class="mt-3">Relevant</h4>
-      <v-divider></v-divider>
-      <div class="ml-4">
-        <ul>
-          <li><a href="https://github.com/muaz-khan/RecordRTC/issues/324">https://github.com/muaz-khan/RecordRTC/issues/324</a>
-          </li>
-          <li><a href="https://github.com/ai/audio-recorder-polyfill/issues/4">https://github.com/ai/audio-recorder-polyfill/issues/4</a>
-          </li>
-          <li><a href="https://github.com/danielstorey/webrtc-audio-recording">https://github.com/danielstorey/webrtc-audio-recording</a>
-          </li>
-        </ul>
-      </div>
-    </v-layout>
-
-    <v-layout column wrap>
       <h4 class="mt-3">Source</h4>
       <v-divider></v-divider>
       <div class="ml-4">
@@ -146,11 +145,26 @@
       </div>
     </v-layout>
 
+    <v-layout column wrap hidden-xs-only>
+      <h4 class="mt-3">Relevant</h4>
+      <v-divider></v-divider>
+      <div class="ml-4">
+        <ul>
+          <li><a href="https://github.com/muaz-khan/RecordRTC/issues/324">https://github.com/muaz-khan/RecordRTC/issues/324</a>
+          </li>
+          <li><a href="https://github.com/ai/audio-recorder-polyfill/issues/4">https://github.com/ai/audio-recorder-polyfill/issues/4</a>
+          </li>
+          <li><a href="https://github.com/danielstorey/webrtc-audio-recording">https://github.com/danielstorey/webrtc-audio-recording</a>
+          </li>
+        </ul>
+      </div>
+    </v-layout>
+
   </v-container>
 </template>
 
 <script>
-import recorderSrvc from '@/shared/RecorderService'
+import RecorderService from '@/shared/RecorderService'
 import utils from '@/shared/Utils'
 
 export default {
@@ -165,21 +179,28 @@ export default {
       recordingInProgress: false,
       supportedMimeTypes: [],
       recordings: [],
+      micGainSlider: 100,
+      micGain: 1.0,
       cleanupWhenFinished: true
     }
   },
   created () {
-    recorderSrvc.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
-    recorderSrvc.em.addEventListener('recording', (evt) => this.onNewRecording(evt))
+    this.recorderSrvc = new RecorderService()
+    this.recorderSrvc.config.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
+    this.recorderSrvc.em.addEventListener('recording', (evt) => this.onNewRecording(evt))
   },
   watch: {
     cleanupWhenFinished (val) {
-      recorderSrvc.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
+      this.recorderSrvc.config.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
+    },
+    micGainSlider () {
+      this.micGain = (this.micGainSlider * 0.01).toFixed(2)
+      this.recorderSrvc.setMicGain(this.micGain)
     }
   },
   methods: {
     startRecording () {
-      recorderSrvc.startRecording()
+      this.recorderSrvc.startRecording()
         .then(() => {
           this.recordingInProgress = true
         })
@@ -189,7 +210,7 @@ export default {
         })
     },
     stopRecording () {
-      recorderSrvc.stopRecording()
+      this.recorderSrvc.stopRecording()
       this.recordingInProgress = false
     },
     onNewRecording (evt) {

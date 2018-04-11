@@ -90,12 +90,12 @@ export default {
     }
   },
   created () {
-    recorderSrvc.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
+    recorderSrvc.config.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
     recorderSrvc.em.addEventListener('recording', (evt) => this.onNewRecording(evt))
   },
   watch: {
     cleanupWhenFinished (val) {
-      recorderSrvc.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
+      recorderSrvc.config.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
     }
   },
   methods: {

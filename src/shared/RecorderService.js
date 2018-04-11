@@ -1,11 +1,10 @@
 import encoder, {MimeType as encoderMimeType} from './wave-encoder'
 
-class RecorderService {
+export default class RecorderService {
   constructor () {
     window.AudioContext = window.AudioContext || window.webkitAudioContext
 
     this.em = document.createDocumentFragment()
-    this.stopTracksAndCloseCtxWhenFinished = true
 
     this.state = 'inactive'
 
@@ -13,6 +12,14 @@ class RecorderService {
     this.chunkType = ''
 
     this.usingMediaRecorder = window.MediaRecorder || false
+
+    this.config = {
+      broadcastAudioProcessEvents: false,
+      forceScriptProcessor: false,
+      micGain: 1.0,
+      processorBufferSize: 2048,
+      stopTracksAndCloseCtxWhenFinished: true
+    }
   }
 
   createWorker (fn) {
@@ -24,7 +31,7 @@ class RecorderService {
     return new Worker(URL.createObjectURL(blob))
   }
 
-  startRecording (timeslice, forceScriptProcessor = false) {
+  startRecording (timeslice) {
     if (this.state !== 'inactive') {
       return
     }
@@ -36,8 +43,8 @@ class RecorderService {
     // If not using MediaRecorder(i.e. safari and edge), then a script processor is required. It's optional
     // on browsers using MediaRecorder and is only useful if wanting to do custom analysis or manipulation of
     // recorded audio data.
-    if (forceScriptProcessor || !this.usingMediaRecorder) {
-      this.processorNode = this.audioCtx.createScriptProcessor(2048, 1, 1) // TODO: Get the number of channels from mic
+    if (this.config.forceScriptProcessor || this.config.broadcastAudioProcessEvents || !this.usingMediaRecorder) {
+      this.processorNode = this.audioCtx.createScriptProcessor(this.config.processorBufferSize, 1, 1) // TODO: Get the number of channels from mic
     }
 
     // Create stream destination on chrome/firefox because, AFAICT, we have no other way of feeding audio graph output
@@ -69,19 +76,30 @@ class RecorderService {
       })
   }
 
+  setMicGain (newGain) {
+    this.config.micGain = newGain
+    if (this.audioCtx && this.micGainNode) {
+      this.micGainNode.gain.setValueAtTime(newGain, this.audioCtx.currentTime)
+    }
+  }
+
   _startRecordingWithStream (stream, timeslice) {
     this.micAudioStream = stream
 
     this.inputStreamNode = this.audioCtx.createMediaStreamSource(this.micAudioStream)
     this.audioCtx = this.inputStreamNode.context
 
+    // Kind-of a hack to allow hooking in to audioGraph inputStreamNode
+    if (this.onGraphSetupWithInputStream) {
+      this.onGraphSetupWithInputStream(this.inputStreamNode)
+    }
+    this.inputStreamNode.connect(this.micGainNode)
+
+    this.micGainNode.gain.setValueAtTime(this.config.micGain, this.audioCtx.currentTime)
+
     if (this.processorNode) {
       this.processorNode.onaudioprocess = (e) => this._onAudioProcess(e)
     }
-
-    this.micGainNode.gain.setValueAtTime(1.0, this.audioCtx.currentTime)
-
-    this.inputStreamNode.connect(this.micGainNode)
 
     this.state = 'recording'
 
@@ -127,11 +145,20 @@ class RecorderService {
     // let inputBuffer = e.inputBuffer
     // let outputBuffer = e.outputBuffer
 
-    // TODO: To make this a reusable class, we might emit an event here so any listeners could
-    // could receive, and possibly manipulate, onaudioprocess data.
     // this.onAudioEm.dispatch(new Event('onaudioprocess', {inputBuffer:inputBuffer,outputBuffer:outputBuffer}))
 
-    // Example handling:
+    if (this.config.broadcastAudioProcessEvents) {
+      this.em.dispatchEvent(new CustomEvent('onaudioprocess', {
+        detail: {
+          inputBuffer: e.inputBuffer,
+          outputBuffer: e.outputBuffer
+        }
+      }))
+    }
+
+    // // Example handling:
+    // let inputBuffer = e.inputBuffer
+    // let outputBuffer = e.outputBuffer
     // // Each channel (usually only one)
     // for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
     //   let inputData = inputBuffer.getChannelData(channel)
@@ -149,19 +176,25 @@ class RecorderService {
     // and a processor (all other browsers), then it would be required to copy the data otherwise the graph would
     // generate no data for the MediaRecorder to consume.
     // if (this.forceScriptProcessor) {
-    // Copy input to output
+
+    // // Copy input to output
+    // let inputBuffer = e.inputBuffer
+    // let outputBuffer = e.outputBuffer
+    // // This doesn't work on iOS/Safari. Guessing it doesn't have copyToChannel support, but haven't verified.
     // for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
     //   outputBuffer.copyToChannel(inputBuffer.getChannelData(channel), channel)
-    // }
     // }
 
     // Safari and Edge require manual encoding via web worker. Single channel only for now.
     // Example stereo encoder: https://github.com/MicrosoftEdge/Demos/blob/master/microphone/scripts/recorderworker.js
     if (!this.usingMediaRecorder) {
       if (this.state === 'recording') {
-        this.encoderWorker.postMessage([
-          'encode', e.inputBuffer.getChannelData(0)
-        ])
+        if (this.config.broadcastAudioProcessEvents) {
+          this.encoderWorker.postMessage(['encode', e.outputBuffer.getChannelData(0)])
+        }
+        else {
+          this.encoderWorker.postMessage(['encode', e.inputBuffer.getChannelData(0)])
+        }
       }
     }
   }
@@ -235,7 +268,7 @@ class RecorderService {
       this.inputStreamNode = null
     }
 
-    if (this.stopTracksAndCloseCtxWhenFinished) {
+    if (this.config.stopTracksAndCloseCtxWhenFinished) {
       // This removes the red bar in iOS/Safari
       this.micAudioStream.getTracks().forEach((track) => track.stop())
       this.micAudioStream = null
@@ -253,5 +286,3 @@ class RecorderService {
     alert('error:' + evt) // for debugging purposes
   }
 }
-
-export default new RecorderService()
