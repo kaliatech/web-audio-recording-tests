@@ -5,7 +5,7 @@
         <h3>Test 3
             <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
             <span v-if="!$vuetify.breakpoint.xsOnly"> - </span>
-            Recording with Multiple Script Processors
+            Script Processors w/ Peak Levels
         </h3>
         <p>Recording with multiple simultaneous script processors. In this case, showing peak levels of recording pre and post gain.</p>
         <div>

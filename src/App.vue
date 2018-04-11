@@ -37,7 +37,7 @@
               <v-icon>mic</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>2 - With Audio Process Events</v-list-tile-title>
+              <v-list-tile-title>2 - Processing &amp; Manipulation</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
 
@@ -46,35 +46,36 @@
               <v-icon>mic</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>3 - With 2nd Script Processor</v-list-tile-title>
+              <v-list-tile-title>3 - Processors w/ Peak Levels</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
- <!--
-          <v-list-tile to="/test3">
-            <v-list-tile-action>
-              <v-icon>mic</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>3 - With Microphone Selection</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+
           <v-list-tile to="/test4">
             <v-list-tile-action>
               <v-icon>mic</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>4 - With In-Browser Encoding</v-list-tile-title>
+              <v-list-tile-title>4 - Microphone Selection</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile to="/test5">
-            <v-list-tile-action>
-              <v-icon>file_upload</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>5 - Upload to S3</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
--->
+          <!--
+                   <v-list-tile to="/test4">
+                     <v-list-tile-action>
+                       <v-icon>mic</v-icon>
+                     </v-list-tile-action>
+                     <v-list-tile-content>
+                       <v-list-tile-title>4 - With In-Browser Encoding</v-list-tile-title>
+                     </v-list-tile-content>
+                   </v-list-tile>
+                   <v-list-tile to="/test5">
+                     <v-list-tile-action>
+                       <v-icon>file_upload</v-icon>
+                     </v-list-tile-action>
+                     <v-list-tile-content>
+                       <v-list-tile-title>5 - Upload to S3</v-list-tile-title>
+                     </v-list-tile-content>
+                   </v-list-tile>
+         -->
           <v-list-tile href="https://github.com/kaliatech/web-audio-recording-tests">
             <v-list-tile-action>
               <v-icon>code</v-icon>
@@ -87,7 +88,7 @@
       </v-navigation-drawer>
       <v-toolbar color="grey" dark fixed app>
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <v-toolbar-title>Web Audio Tests</v-toolbar-title>
+        <v-toolbar-title>Web Audio Recording Tests</v-toolbar-title>
         <v-spacer></v-spacer>
         <a href="https://github.com/kaliatech/web-audio-recording-tests">
         <v-icon large>code</v-icon>

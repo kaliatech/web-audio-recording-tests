@@ -6,7 +6,7 @@
       <v-flex md6>
         <div class="text-xs-center home--menu">
           <p>
-            Tests to verify functionality of web audio api across all browsers. Particularly on iOS/Safari 11.2.x as it
+            Tests to verify functionality of web audio <strong>recording</strong> across all browsers. Particularly on iOS/Safari 11.2.x as it
             is very strict on security context and has <del>bugs</del>
             <em>special features</em>.
           </p>
@@ -18,20 +18,20 @@
             <v-btn color="info" to="/test1">1 - Repeatable Audio Recording</v-btn>
           </div>
           <div>
-            <v-btn color="info" to="/test2">2 - Audio Process Events</v-btn>
+            <v-btn color="info" to="/test2">2 - Processing &amp; Manipulation</v-btn>
           </div>
           <div>
-            <v-btn color="info" to="/test3">3 - With 2nd Script Processor</v-btn>
+            <v-btn color="info" to="/test3">3 - Processors w/ Peak Levels</v-btn>
+          </div>
+          <div>
+            <v-btn color="info" to="/test4">4 - Microphone Selection</v-btn>
           </div>
           <!--
-          <div>
-            <v-btn color="info" to="/test3">3 - Microphone Selection</v-btn>
-          </div>
                     <div>
-                      <v-btn color="info" to="/test4">4 - In-Browser Encoding</v-btn>
+                      <v-btn color="info" to="/test5">5 - In-Browser Encoding</v-btn>
                     </div>
                     <div>
-                      <v-btn color="info" to="/test5">5 - Upload to S3</v-btn>
+                      <v-btn color="info" to="/test6">6 - Upload to S3</v-btn>
                     </div>
           -->
         </div>

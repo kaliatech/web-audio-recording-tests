@@ -18,7 +18,8 @@ export default class RecorderService {
       forceScriptProcessor: false,
       micGain: 1.0,
       processorBufferSize: 2048,
-      stopTracksAndCloseCtxWhenFinished: true
+      stopTracksAndCloseCtxWhenFinished: true,
+      userMediaConstraints: {audio: true}
     }
   }
 
@@ -66,11 +67,9 @@ export default class RecorderService {
       })
     }
 
+    console.log('constraints', this.config.userMediaConstraints)
     // This will prompt user for permission if needed
-    const mediaConstraints = {
-      audio: true
-    }
-    return navigator.mediaDevices.getUserMedia(mediaConstraints)
+    return navigator.mediaDevices.getUserMedia(this.config.userMediaConstraints)
       .then((stream) => {
         this._startRecordingWithStream(stream, timeslice)
       })
@@ -208,15 +207,16 @@ export default class RecorderService {
       this.mediaRecorder.stop()
     }
     else {
+      this.state = 'inactive'
       this.encoderWorker.postMessage(['dump', this.audioCtx.sampleRate])
       clearInterval(this.slicing)
 
       // TODO: There should be a more robust way to handle this
-      // Without this, the last recorded sample might be lost due to timing
-      setTimeout(() => {
-        this.state = 'inactive'
-        this.encoderWorker.postMessage(['dump', this.audioCtx.sampleRate])
-      }, 100)
+      // Without something like this, I think  the last recorded sample could be lost due to timing
+      // setTimeout(() => {
+      //   this.state = 'inactive'
+      //   this.encoderWorker.postMessage(['dump', this.audioCtx.sampleRate])
+      // }, 100)
     }
   }
 

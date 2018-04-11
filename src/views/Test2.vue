@@ -5,7 +5,7 @@
         <h3>Test 2
           <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
           <span v-if="!$vuetify.breakpoint.xsOnly"> - </span>
-          Recording with Audio Process Events
+          Recording Processing &amp; Manipulation
         </h3>
 
         <h3></h3>
@@ -27,7 +27,7 @@
 
     <v-layout row wrap class="ml-1 mt-1">
       <v-checkbox v-model="addNoise"
-                  label="Add noise (changeable while recording)"></v-checkbox>
+                  label="Add noise (dynamic)"></v-checkbox>
     </v-layout>
 
     <v-layout column wrap v-if="recordings.length > 0">
