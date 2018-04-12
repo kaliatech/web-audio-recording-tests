@@ -1,3 +1,7 @@
+var GitRevisionPlugin = require('git-revision-webpack-plugin')
+
+let gitRevisionPlugin = new GitRevisionPlugin()
+
 module.exports = {
   lintOnSave: true,
   devServer: {
@@ -9,6 +13,11 @@ module.exports = {
     if (process.env.NODE_ENV === 'production') {
       config.output.publicPath = ''
     }
+    // config.plugins.push(new DefinePlugin({
+    //   'VERSION': JSON.stringify(gitRevisionPlugin.version()),
+    //   'COMMITHASH': JSON.stringify(gitRevisionPlugin.commithash()),
+    //   'BRANCH': JSON.stringify(gitRevisionPlugin.branch()),
+    // }))
   },
   // configureWebpack: {
   //   entry: {
@@ -18,6 +27,16 @@ module.exports = {
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   chainWebpack: config => {
+    config.plugin('define').tap(options => {
+      Object.assign(options[0], {
+        'WEBPACK_VERSION': JSON.stringify(gitRevisionPlugin.version()),
+        'WEBPACK_COMMITHASH': JSON.stringify(gitRevisionPlugin.commithash()),
+        'WEBPACK_BRANCH': JSON.stringify(gitRevisionPlugin.branch()),
+        'WEBPACK_TIMESTAMP': JSON.stringify(new Date())
+      })
+      return options
+    })
+
     // config.entryPoints.delete('app')
     // config
     //   .entry('polyfill-mediarecorder')

@@ -84,6 +84,16 @@
               <v-list-tile-title>View on Github</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+
+          <v-list-tile to="/version">
+            <v-list-tile-action>
+              <v-icon>error_outline</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Build Version</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
         </v-list>
       </v-navigation-drawer>
       <v-toolbar color="grey" dark fixed app>
