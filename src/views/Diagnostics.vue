@@ -11,11 +11,8 @@
       <v-flex xs12>
         <ul>
           <li><span class="lbl">AudioContext</span> : <span class="val">{{ audioContextStr }}</span></li>
-          <li><span class="lbl">webkitAudioContext</span> : <span class="val">{{ webkitAudioContextStr }}</span>
-          <li><span class="lbl">MediaRecorder</span> : <span class="val">{{ mediaRecorderOrigStr }}</span>
-          <li><span class="lbl">MediaRecorder(Polyfilled)</span> : <span
-            class="val">{{ mediaRecorderPolyfilled }}</span>
-          </li>
+          <li><span class="lbl">webkitAudioContext</span> : <span class="val">{{ webkitAudioContextStr }}</span></li>
+          <li><span class="lbl">MediaRecorder</span> : <span class="val">{{ mediaRecorderOrigStr }}</span></li>
         </ul>
       </v-flex>
     </v-layout>
@@ -25,7 +22,11 @@
     </v-layout>
     <v-layout row wrap class="ml-4">
       <v-flex sm6 v-for="name in availableDeviceNames" v-bind:key="name">
-        <div class="lbl">{{name}}</div>
+        <div class="pr-3">
+          <ul>
+            <li>{{name}}</li>
+          </ul>
+        </div>
       </v-flex>
     </v-layout>
     <v-layout row wrap class="ml-4" v-if="enumeratedDevicesPermissionNeeded">
@@ -43,6 +44,21 @@
     </v-layout>
     <v-layout row wrap class="ml-4">
       <span v-for="deviceConstraint in supportedDeviceConstraints" v-bind:key="deviceConstraint" class="lbl">{{ deviceConstraint }}</span>
+    </v-layout>
+
+    <v-layout row class="mt-3">
+      <h4>Default Capabilities, Constraints, & Settings</h4>
+    </v-layout>
+    <v-layout row wrap class="ml-4">
+      <v-flex sm12 v-for="detail in defaultDeviceDetails" v-bind:key="detail.name">
+
+        <ul>
+          <li>
+            <span class="lbl-1">{{ detail.name }}</span> : <span class="val">{{ detail.text}}</span>
+          </li>
+        </ul>
+
+      </v-flex>
     </v-layout>
 
     <v-layout row class="mt-3">
@@ -65,6 +81,8 @@
         <ul>
           <li><a
             href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API</a>
+          </li>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints">https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints</a>
           </li>
           <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API</a>
           </li>
@@ -93,12 +111,12 @@ export default {
   data () {
     return {
       availableDeviceNames: [],
+      defaultDeviceDetails: [],
       enumeratedDevices: [],
       enumeratedDevicesPermissionNeeded: false,
       enumeratedDevicesPermissionRevokable: false,
       supportedMimeTypes: [],
       mediaRecorderOrigStr: typeof window.MediaRecorder,
-      mediaRecorderPolyfilled: 'false',
       supportedDeviceConstraints: []
     }
   },
@@ -110,6 +128,15 @@ export default {
     },
     webkitAudioContextStr () {
       return typeof window.webkitAudioContext
+    }
+  },
+  mounted () {
+    this.requestDevicePermissions()
+  },
+  destroyed () {
+    if (this.stream) {
+      this.stream.getTracks().forEach((track) => track.stop())
+      this.stream = null
     }
   },
   created () {
@@ -132,7 +159,7 @@ export default {
       'video/mp4']
 
     if (typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) {
-      this.supportedMimeTypes.push({name: 'audio/x-wav', supported: '(manual encoding)'})
+      this.supportedMimeTypes.push({name: 'none', supported: '(manual encoding required)'})
     }
     else {
       for (const i in types) {
@@ -160,10 +187,10 @@ export default {
         if (device.kind === 'audioinput') {
           if (!device.label) {
             this.enumeratedDevicesPermissionNeeded = true
-            availDevices.push('Input ' + idx + ' (' + device.deviceId.substr(0, 15) + ')')
+            availDevices.push('Input ' + idx + ' (' + device.deviceId + ')')
           }
           else {
-            availDevices.push(device.label.substr(0, 25))
+            availDevices.push(device.label)
           }
         }
       })
@@ -183,12 +210,44 @@ export default {
     requestDevicePermissions () {
       // this.enumeratedDevices.forEach((device) => {
       // })
-      navigator.mediaDevices.getUserMedia({audio: true, deviceId: 'default'})
+      navigator.mediaDevices.getUserMedia({audio: true})
         .then((stream) => {
+          console.log('stream', stream)
+
           this.enumerateDevices()
           this.enumeratedDevicesPermissionNeeded = false
           this.enumeratedDevicesPermissionRevokable = true
           this.stream = stream
+
+          this.defaultDeviceDetails = []
+          let d = this.defaultDeviceDetails
+
+          let tracks = stream.getAudioTracks()
+          console.log('tracks', tracks)
+          tracks.forEach((track, trackIdx) => {
+            let th = 'track[' + trackIdx + '].'
+            d.push({name: th + 'label', text: track.label})
+            d.push({name: th + 'kind', text: track.kind})
+            d.push({name: th + 'muted', text: track.muted})
+
+            let constraints = track.getConstraints()
+            console.log('constraints', constraints)
+            for (let key in constraints) {
+              d.push({name: th + 'constr[' + key + ']', text: constraints[key]})
+            }
+
+            let capabilities = track.getCapabilities()
+            console.log('capabilities', capabilities)
+            for (let key in capabilities) {
+              d.push({name: th + 'capab[' + key + ']', text: capabilities[key]})
+            }
+
+            let settings = track.getSettings()
+            console.log('settings', settings)
+            for (let key in settings) {
+              d.push({name: th + 'settings[' + key + ']', text: settings[key]})
+            }
+          })
         })
         .catch((error) => {
           console.log(error)
@@ -209,6 +268,11 @@ export default {
 
 <style scoped>
   .lbl {
+    display: inline-block;
+    width: 15em;
+  }
+
+  .lbl-1 {
     display: inline-block;
     width: 15em;
   }
