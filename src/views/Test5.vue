@@ -1,23 +1,40 @@
 <template>
-  <v-container>
+  <v-container mb-5>
     <v-layout row wrap>
-      <div class="test3">
-        <h3>In-browser encoding</h3>
-        <p>Tests to verify it's possible to encode the recording before upload. Particularly important on ios/edge which record to uncompressed WAV format by default.</p>
-        <div>
-          <v-btn @click="startRecording" :disabled="recordingInProgress">Start Recording
-          </v-btn>
-          <v-btn @click="stopRecording" :disabled="!recordingInProgress">Stop Recording</v-btn>
-          <v-icon :class="recordingInProgress ? 'live' : ''">mic</v-icon>
-        </div>
+
+      <div class="test2">
+        <h3>Test 5
+          <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
+          <span v-if="!$vuetify.breakpoint.xsOnly"> - </span>
+          Analyzer Node
+        </h3>
+        <p>Test using analyzer node.
+        </p>
       </div>
     </v-layout>
+
     <v-layout row wrap class="ml-1 mt-1">
-      <v-checkbox v-model="cleanupWhenFinished"
-                  label="Stop tracks and close audio context when recording stopped"></v-checkbox>
+      <div>
+        <v-btn @click="startRecording" :disabled="recordingInProgress">Start Recording
+        </v-btn>
+        <v-btn @click="stopRecording" :disabled="!recordingInProgress">Stop Recording</v-btn>
+        <v-icon :class="recordingInProgress ? 'live' : ''">mic</v-icon>
+      </div>
     </v-layout>
+
+    <v-layout row wrap class="mt-1">
+      <v-flex xs12>
+        <h4 class="mt-3">FFT Visualization</h4>
+        <v-divider></v-divider>
+      </v-flex>
+      <v-flex xs12>
+        <canvas style="border: 1px solid black; width:100%; height:20em"></canvas>
+      </v-flex>
+    </v-layout>
+
     <v-layout column wrap v-if="recordings.length > 0">
       <h4 class="mt-3">Recordings</h4>
+      <v-divider></v-divider>
       <div v-for="(recording,idx) in recordings" :key="recording.ts">
         <v-card>
           <v-card-title primary-title>
@@ -41,28 +58,29 @@
     </v-layout>
 
     <v-layout column wrap>
-      <h4 class="mt-3">Relevant</h4>
-      <v-divider></v-divider>
-      <div class="ml-4">
-        <ul>
-          <li><a href="https://github.com/zhuker/lamejs">https://github.com/zhuker/lamejs</a></li>
-          <li><a href="https://github.com/blixt/js-lameworker">https://github.com/blixt/js-lameworker</a></li>
-          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API</a></li>
-          <li><a href="https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/">https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/</a></li>
-          <ul>
-          <li><a href="https://github.com/MicrosoftEdge/Demos/blob/master/microphone">https://github.com/MicrosoftEdge/Demos/blob/master/microphone</a></li>
-          </ul>
-        </ul>
-      </div>
-    </v-layout>
-
-    <v-layout column wrap>
       <h4 class="mt-3">Source</h4>
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test4.vue">src/views/Test4.vue</a>
+          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test5.vue">src/views/Test5.vue</a>
+            <ul class="ml-3">
+              <li>Primarily: <a
+                href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a>
+              </li>
+            </ul>
           </li>
+        </ul>
+      </div>
+    </v-layout>
+
+    <v-layout column wrap hidden-xs-only>
+      <h4 class="mt-3">Relevant</h4>
+      <v-divider></v-divider>
+      <div class="ml-4">
+        <ul>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode">https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode</a>
+          </li>
+          <li><a href="http://webaudioapi.com/samples/visualizer/">http://webaudioapi.com/samples/visualizer/</a></li>
         </ul>
       </div>
     </v-layout>
@@ -71,11 +89,14 @@
 </template>
 
 <script>
-import recorderSrvc from '@/shared/RecorderServiceTest2'
+import RecorderService from '@/shared/RecorderService'
 import utils from '@/shared/Utils'
 
+const SMOOTHING = 0.7
+const FFT_SIZE = 2048
+
 export default {
-  name: 'Test1',
+  name: 'Test3',
   filters: {
     fileSizeToHumanSize (val) {
       return utils.humanFileSize(val, true)
@@ -84,25 +105,35 @@ export default {
   data () {
     return {
       recordingInProgress: false,
-      supportedMimeTypes: [],
-      recordings: [],
-      cleanupWhenFinished: true
+      recordings: []
     }
   },
+  watch: {},
   created () {
-    recorderSrvc.config.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
-    recorderSrvc.em.addEventListener('recording', (evt) => this.onNewRecording(evt))
+    this.recorderSrvc = new RecorderService()
+    this.recorderSrvc.config.createAnalyserNode = true
+    this.recorderSrvc.em.addEventListener('recording', (evt) => this.onNewRecording(evt))
   },
-  watch: {
-    cleanupWhenFinished (val) {
-      recorderSrvc.config.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
-    }
+  mounted () {
   },
   methods: {
     startRecording () {
-      recorderSrvc.startRecording()
+      this.recorderSrvc.startRecording()
         .then(() => {
           this.recordingInProgress = true
+          this.analyser = this.recorderSrvc.analyserNode
+          this.audioCtx = this.recorderSrvc.audioCtx
+
+          this.analyser.minDecibels = -140
+          this.analyser.maxDecibels = 0
+          this.freqs = new Uint8Array(this.analyser.frequencyBinCount)
+          this.times = new Uint8Array(this.analyser.frequencyBinCount)
+
+          this.canvas = document.querySelector('canvas')
+          this.canvasWidth = this.canvas.width
+          this.canvasHeight = this.canvas.height
+
+          window.requestAnimationFrame(this.draw.bind(this))
         })
         .catch((error) => {
           console.error('Exception while start recording: ' + error)
@@ -110,11 +141,61 @@ export default {
         })
     },
     stopRecording () {
-      recorderSrvc.stopRecording()
       this.recordingInProgress = false
+      this.recorderSrvc.stopRecording()
     },
     onNewRecording (evt) {
       this.recordings.push(evt.detail.recording)
+    },
+    draw () {
+      this.analyser.smoothingTimeConstant = SMOOTHING
+      this.analyser.fftSize = FFT_SIZE
+
+      // Get the frequency data from the currently playing music
+      this.analyser.getByteFrequencyData(this.freqs)
+      this.analyser.getByteTimeDomainData(this.times)
+
+      // let width = Math.floor(1 / this.freqs.length, 10)
+
+      let canvas = this.canvas
+      let drawContext = canvas.getContext('2d')
+      let cWidth = this.canvasWidth
+      let cHeight = this.canvasHeight
+
+      drawContext.clearRect(0, 0, cWidth, cHeight)
+
+      // Draw the frequency domain chart.
+
+      for (let i = 0; i < this.analyser.frequencyBinCount; i++) {
+        let value = this.freqs[i]
+        let percent = value / 256
+        let height = cHeight * percent
+        let offset = cHeight - height - 1
+        let barWidth = cWidth / this.analyser.frequencyBinCount
+        let hue = i / this.analyser.frequencyBinCount * 360
+        drawContext.fillStyle = 'hsl(' + hue + ', 100%, 50%)'
+        drawContext.fillRect(i * barWidth, offset, barWidth, height)
+      }
+
+      // Draw the time domain chart.
+      drawContext.fillStyle = 'gray'
+      for (let i = 0; i < this.analyser.frequencyBinCount; i++) {
+        let value = this.times[i]
+        let percent = value / 256
+        let height = cHeight * percent
+        let offset = cHeight - height - 1
+        let barWidth = cWidth / this.analyser.frequencyBinCount
+        drawContext.fillRect(i * barWidth, offset, 1, 2)
+      }
+
+      if (this.recordingInProgress) {
+        window.requestAnimationFrame(this.draw.bind(this))
+      }
+    },
+    getFrequencyValue (freq) {
+      let nyquist = this.audioContext.sampleRate / 2
+      let index = Math.round(freq / nyquist * this.freqs.length)
+      return this.freqs[index]
     }
   }
 }

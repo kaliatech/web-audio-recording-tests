@@ -52,6 +52,7 @@
 
     <v-layout column wrap v-if="recordings.length > 0">
       <h4 class="mt-3">Recordings</h4>
+      <v-divider></v-divider>
       <div v-for="(recording,idx) in recordings" :key="recording.ts">
         <v-card>
           <v-card-title primary-title>
@@ -79,7 +80,7 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test2.vue">src/views/Test3.vue</a>
+          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test4.vue">src/views/Test4.vue</a>
             <ul class="ml-3">
               <li>Primarily: <a
                 href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a>

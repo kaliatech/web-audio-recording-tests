@@ -32,6 +32,7 @@
       <h4 class="mt-3">Recording Peak Meters</h4>
     </v-layout>
 
+    <v-divider></v-divider>
     <v-layout row wrap>
       <v-flex xs6 sm2>
         <div id="peak-meter-raw" style="width: 5em; height: 10em; margin: 1em 0; border:1px solid gray"></div>
@@ -46,6 +47,7 @@
 
     <v-layout column wrap v-if="recordings.length > 0">
       <h4 class="mt-3">Recordings</h4>
+      <v-divider></v-divider>
       <div v-for="(recording,idx) in recordings" :key="recording.ts">
         <v-card>
           <v-card-title primary-title>
@@ -73,7 +75,7 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test2.vue">src/views/Test3.vue</a>
+          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test3.vue">src/views/Test3.vue</a>
             <ul class="ml-3">
               <li>Primarily: <a
                 href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a>

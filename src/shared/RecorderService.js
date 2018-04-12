@@ -15,6 +15,7 @@ export default class RecorderService {
 
     this.config = {
       broadcastAudioProcessEvents: false,
+      createAnalyserNode: false,
       forceScriptProcessor: false,
       micGain: 1.0,
       processorBufferSize: 2048,
@@ -40,6 +41,9 @@ export default class RecorderService {
     this.audioCtx = new AudioContext()
     this.micGainNode = this.audioCtx.createGain()
     this.outputGainNode = this.audioCtx.createGain()
+    if (this.config.createAnalyserNode) {
+      this.analyserNode = this.audioCtx.createAnalyser()
+    }
 
     // If not using MediaRecorder(i.e. safari and edge), then a script processor is required. It's optional
     // on browsers using MediaRecorder and is only useful if wanting to do custom analysis or manipulation of
@@ -95,21 +99,26 @@ export default class RecorderService {
 
     this.micGainNode.gain.setValueAtTime(this.config.micGain, this.audioCtx.currentTime)
 
-    if (this.processorNode) {
-      this.processorNode.onaudioprocess = (e) => this._onAudioProcess(e)
-    }
-
     this.state = 'recording'
 
     if (this.processorNode) {
       this.micGainNode.connect(this.processorNode)
       this.processorNode.connect(this.outputGainNode)
-      this.outputGainNode.connect(this.destinationNode)
+      this.processorNode.onaudioprocess = (e) => this._onAudioProcess(e)
     }
     else {
       this.micGainNode.connect(this.outputGainNode)
-      this.outputGainNode.connect(this.destinationNode)
     }
+
+    if (this.analyserNode) {
+      // TODO: If we want the analyser node to receive the processorNode's output, this needs to be changed _and_
+      //       processor node needs to be modified to copy input to output. It currently doesn't because it's not
+      //       needed when doing manual encoding.
+      // this.processorNode.connect(this.analyserNode)
+      this.micGainNode.connect(this.analyserNode)
+    }
+
+    this.outputGainNode.connect(this.destinationNode)
 
     if (this.usingMediaRecorder) {
       this.mediaRecorder = new MediaRecorder(this.destinationNode.stream)
@@ -249,6 +258,10 @@ export default class RecorderService {
     if (this.outputGainNode) {
       this.outputGainNode.disconnect()
       this.outputGainNode = null
+    }
+    if (this.analyserNode) {
+      this.analyserNode.disconnect()
+      this.analyserNode = null
     }
     if (this.processorNode) {
       this.processorNode.disconnect()

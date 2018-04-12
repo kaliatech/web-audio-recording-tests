@@ -58,6 +58,16 @@
               <v-list-tile-title>4 - Microphone Selection</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+
+          <v-list-tile to="/test5">
+            <v-list-tile-action>
+              <v-icon>mic</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>5 - Analyser Node</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
           <!--
                    <v-list-tile to="/test4">
                      <v-list-tile-action>

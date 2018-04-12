@@ -13,6 +13,7 @@
           <li><span class="lbl">AudioContext</span> : <span class="val">{{ audioContextStr }}</span></li>
           <li><span class="lbl">webkitAudioContext</span> : <span class="val">{{ webkitAudioContextStr }}</span></li>
           <li><span class="lbl">MediaRecorder</span> : <span class="val">{{ mediaRecorderOrigStr }}</span></li>
+          <li><span class="lbl">AnalyserNode</span> : <span class="val">{{ analyserNode }}</span></li>
         </ul>
       </v-flex>
     </v-layout>
@@ -125,6 +126,9 @@ export default {
       // var AudioContext = window.AudioContext || window.webkitAudioContext;
       // var audioCtx = new AudioContext();
       return typeof window.AudioContext
+    },
+    analyserNode () {
+      return typeof window.AnalyserNode
     },
     webkitAudioContextStr () {
       return typeof window.webkitAudioContext

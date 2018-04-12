@@ -26,7 +26,11 @@
           <div>
             <v-btn color="info" to="/test4">4 - Microphone Selection</v-btn>
           </div>
+          <div>
+            <v-btn color="info" to="/test5">5 - Analyser Node</v-btn>
+          </div>
           <!--
+
                     <div>
                       <v-btn color="info" to="/test5">5 - In-Browser Encoding</v-btn>
                     </div>
