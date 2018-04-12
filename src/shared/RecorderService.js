@@ -67,7 +67,6 @@ export default class RecorderService {
       })
     }
 
-    console.log('constraints', this.config.userMediaConstraints)
     // This will prompt user for permission if needed
     return navigator.mediaDevices.getUserMedia(this.config.userMediaConstraints)
       .then((stream) => {
