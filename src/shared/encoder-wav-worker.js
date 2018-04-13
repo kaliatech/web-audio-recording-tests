@@ -1,7 +1,6 @@
-export const MimeType = 'audio/wave'
 
-// Parts copied from https://github.com/chris-rudmin/Recorderjs
 export default function () {
+// Parts copied from https://github.com/chris-rudmin/Recorderjs
   let BYTES_PER_SAMPLE = 2
   let recorded = []
 
@@ -63,11 +62,11 @@ export default function () {
     }
 
     recorded = []
-    postMessage(wav.buffer, [wav.buffer])
+    let msg = [wav.buffer]
+    postMessage(msg, [msg[0]])
   }
 
-  onmessage = function (e) {
-    console.log('hereAA')
+  self.onmessage = function (e) {
     if (e.data[0] === 'encode') {
       encode(e.data[1])
     }
@@ -75,7 +74,7 @@ export default function () {
       dump(e.data[1])
     }
     else if (e.data[0] === 'close') {
-      this.close()
+      self.close()
     }
   }
 }

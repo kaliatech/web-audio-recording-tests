@@ -34,8 +34,34 @@ module.exports = {
         'WEBPACK_BRANCH': JSON.stringify(gitRevisionPlugin.branch()),
         'WEBPACK_TIMESTAMP': JSON.stringify(new Date())
       })
+
+      // There has got to be a better way...
+      // Currently need this for loading the webworkers which have different rules and restrictions
+      if (process.env.NODE_ENV === 'production') {
+        Object.assign(options[0], {
+          'BASE_URL': JSON.stringify('https://kaliatech.github.io/web-audio-recording-tests/dist'),
+        })
+      }
+      else {
+        Object.assign(options[0], {
+          //'BASE_URL': JSON.stringify('https://localhost:8443'),
+          'BASE_URL': JSON.stringify('https://10.9.22.161:8443'),
+        })
+      }
       return options
     })
+    //# worker-loaded webified the workers and allowed use of ES6 imports inside the workers. However, that workers were
+    // never reloaded from cache. Webpack service had to be stopped, and cache directory deleted, before getting changes.
+    // Also, the encoders are large, so probably not good to load in to the main bundle anyways.
+    // config.module
+    //   .rule('worker')
+    //     .test(/-worker\.js$/)
+    //     .use('worker-loader')
+    //       .loader('worker-loader')
+    //     .options({inline: true})
+
+
+    // config.loaders.push(new )
 
     // config.entryPoints.delete('app')
     // config

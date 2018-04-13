@@ -29,15 +29,9 @@
           <div>
             <v-btn color="info" to="/test5">5 - Analyser Node</v-btn>
           </div>
-          <!--
-
-                    <div>
-                      <v-btn color="info" to="/test5">5 - In-Browser Encoding</v-btn>
-                    </div>
-                    <div>
-                      <v-btn color="info" to="/test6">6 - Upload to S3</v-btn>
-                    </div>
-          -->
+          <div>
+            <v-btn color="info" to="/test6">6 - Alternate Encoders</v-btn>
+          </div>
         </div>
       </v-flex>
       <v-flex md3>

@@ -1,7 +1,11 @@
-import encoder, {MimeType as encoderMimeType} from './wave-encoder'
+import EncoderWav from './encoder-wav-worker.js'
+import EncoderMp3 from './encoder-mp3-worker.js'
+import EncoderOgg from './encoder-ogg-worker.js'
 
 export default class RecorderService {
-  constructor () {
+  constructor (baseUrl) {
+    this.baseUrl = baseUrl
+
     window.AudioContext = window.AudioContext || window.webkitAudioContext
 
     this.em = document.createDocumentFragment()
@@ -11,12 +15,16 @@ export default class RecorderService {
     this.chunks = []
     this.chunkType = ''
 
-    this.usingMediaRecorder = window.MediaRecorder || false
+    // this.usingMediaRecorder = window.MediaRecorder || false
+    this.usingMediaRecorder = false
+
+    this.encoderMimeType = 'audio/wav'
 
     this.config = {
       broadcastAudioProcessEvents: false,
       createAnalyserNode: false,
       forceScriptProcessor: false,
+      manualEncoderId: 'wav',
       micGain: 1.0,
       processorBufferSize: 2048,
       stopTracksAndCloseCtxWhenFinished: true,
@@ -63,10 +71,30 @@ export default class RecorderService {
 
     // Create web worker for doing the encoding
     if (!this.usingMediaRecorder) {
-      this.encoderWorker = this.createWorker(encoder)
+      if (this.config.manualEncoderId === 'mp3') {
+        // This also works and avoids weirdness imports with workers
+        // this.encoderWorker = new Worker(BASE_URL + '/workers/encoder-ogg-worker.js')
+        this.encoderWorker = this.createWorker(EncoderMp3)
+        this.encoderWorker.postMessage(['init', {baseUrl: BASE_URL, sampleRate: this.audioCtx.sampleRate}])
+        this.encoderMimeType = 'audio/mpeg'
+      }
+      else if (this.config.manualEncoderId === 'ogg') {
+        this.encoderWorker = this.createWorker(EncoderOgg)
+        this.encoderWorker.postMessage(['init', {baseUrl: BASE_URL, sampleRate: this.audioCtx.sampleRate}])
+        this.encoderMimeType = 'audio/ogg'
+      }
+      else {
+        this.encoderWorker = this.createWorker(EncoderWav)
+        this.encoderMimeType = 'audio/wav'
+      }
       this.encoderWorker.addEventListener('message', (e) => {
         let event = new Event('dataavailable')
-        event.data = new Blob([e.data], {type: encoderMimeType})
+        if (this.config.manualEncoderId === 'ogg') {
+          event.data = e.data
+        }
+        else {
+          event.data = new Blob(e.data, {type: this.encoderMimeType})
+        }
         this._onDataAvailable(event)
       })
     }
@@ -134,7 +162,7 @@ export default class RecorderService {
       this.outputGainNode.gain.setValueAtTime(0, this.audioCtx.currentTime)
       // this.outputGainNode.gain.value = 0
 
-      // Todo: Note that time slicing with manual wav encoder won't work. To allow it would require rewriting the encoder
+      // Todo: Note that time slicing with manual wav encoderWav won't work. To allow it would require rewriting the encoderWav
       // to assemble all chunks at end instead of adding header to each chunk.
       if (timeslice) {
         console.log('Time slicing without MediaRecorder is not yet supported. The resulting recording will not be playable.')
@@ -151,6 +179,9 @@ export default class RecorderService {
     // console.log('onaudioprocess', e)
     // let inputBuffer = e.inputBuffer
     // let outputBuffer = e.outputBuffer
+    // console.log(this.micAudioStream)
+    // console.log(this.audioCtx)
+    // console.log(this.micAudioStream.getTracks().forEach((track) => console.log(track)))
 
     // this.onAudioEm.dispatch(new Event('onaudioprocess', {inputBuffer:inputBuffer,outputBuffer:outputBuffer}))
 
@@ -193,7 +224,7 @@ export default class RecorderService {
     // }
 
     // Safari and Edge require manual encoding via web worker. Single channel only for now.
-    // Example stereo encoder: https://github.com/MicrosoftEdge/Demos/blob/master/microphone/scripts/recorderworker.js
+    // Example stereo encoderWav: https://github.com/MicrosoftEdge/Demos/blob/master/microphone/scripts/recorderworker.js
     if (!this.usingMediaRecorder) {
       if (this.state === 'recording') {
         if (this.config.broadcastAudioProcessEvents) {

@@ -152,8 +152,9 @@ export default {
       'audio/wav',
       'audio/webm',
       'audio/webm;codecs=opus',
-      'audio/x-wav',
       'audio/wav',
+      'audio/x-wav',
+      'audio/vnd.wav',
 
       'video/quicktime',
       'video/webm',

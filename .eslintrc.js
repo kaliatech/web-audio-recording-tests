@@ -13,7 +13,8 @@ module.exports = {
     "WEBPACK_VERSION": true,
     "WEBPACK_COMMITHASH": true,
     "WEBPACK_BRANCH": true,
-    "WEBPACK_TIMESTAMP": true
+    "WEBPACK_TIMESTAMP": true,
+    "BASE_URL": true
   },
   extends: [
     // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
