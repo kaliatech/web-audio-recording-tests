@@ -15,14 +15,14 @@ export default class RecorderService {
     this.chunks = []
     this.chunkType = ''
 
-    // this.usingMediaRecorder = window.MediaRecorder || false
-    this.usingMediaRecorder = false
+    this.usingMediaRecorder = window.MediaRecorder || false
 
     this.encoderMimeType = 'audio/wav'
 
     this.config = {
       broadcastAudioProcessEvents: false,
       createAnalyserNode: false,
+      createDynamicsCompressorNode: false,
       forceScriptProcessor: false,
       manualEncoderId: 'wav',
       micGain: 1.0,
@@ -49,6 +49,11 @@ export default class RecorderService {
     this.audioCtx = new AudioContext()
     this.micGainNode = this.audioCtx.createGain()
     this.outputGainNode = this.audioCtx.createGain()
+
+    if (this.config.createDynamicsCompressorNode) {
+      this.dynamicsCompressorNode = this.audioCtx.createDynamicsCompressor()
+    }
+
     if (this.config.createAnalyserNode) {
       this.analyserNode = this.audioCtx.createAnalyser()
     }
@@ -123,19 +128,27 @@ export default class RecorderService {
     if (this.onGraphSetupWithInputStream) {
       this.onGraphSetupWithInputStream(this.inputStreamNode)
     }
-    this.inputStreamNode.connect(this.micGainNode)
 
+    this.inputStreamNode.connect(this.micGainNode)
     this.micGainNode.gain.setValueAtTime(this.config.micGain, this.audioCtx.currentTime)
+
+    let nextNode = this.micGainNode
+    if (this.dynamicsCompressorNode) {
+      this.micGainNode.connect(this.dynamicsCompressorNode)
+      nextNode = this.dynamicsCompressorNode
+    }
+
+    console.log('nextNode', nextNode)
 
     this.state = 'recording'
 
     if (this.processorNode) {
-      this.micGainNode.connect(this.processorNode)
+      nextNode.connect(this.processorNode)
       this.processorNode.connect(this.outputGainNode)
       this.processorNode.onaudioprocess = (e) => this._onAudioProcess(e)
     }
     else {
-      this.micGainNode.connect(this.outputGainNode)
+      nextNode.connect(this.outputGainNode)
     }
 
     if (this.analyserNode) {
@@ -143,7 +156,7 @@ export default class RecorderService {
       //       processor node needs to be modified to copy input to output. It currently doesn't because it's not
       //       needed when doing manual encoding.
       // this.processorNode.connect(this.analyserNode)
-      this.micGainNode.connect(this.analyserNode)
+      nextNode.connect(this.analyserNode)
     }
 
     this.outputGainNode.connect(this.destinationNode)
@@ -301,6 +314,10 @@ export default class RecorderService {
     if (this.encoderWorker) {
       this.encoderWorker.postMessage(['close'])
       this.encoderWorker = null
+    }
+    if (this.dynamicsCompressorNode) {
+      this.dynamicsCompressorNode.disconnect()
+      this.dynamicsCompressorNode = null
     }
     if (this.micGainNode) {
       this.micGainNode.disconnect()

@@ -28,6 +28,11 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap class="ml-1 mt-1">
+      <v-checkbox v-model="addDynamicsCompressor"
+                  label="Add dynamics compressor to audio graph"
+                  :disabled="recordingInProgress"></v-checkbox>
+    </v-layout>
+    <v-layout row wrap class="ml-1 mt-1">
       <v-checkbox v-model="cleanupWhenFinished"
                   label="Stop tracks and close audio context when recording stopped"></v-checkbox>
     </v-layout>
@@ -181,12 +186,12 @@ export default {
       recordings: [],
       micGainSlider: 100,
       micGain: 1.0,
-      cleanupWhenFinished: true
+      cleanupWhenFinished: true,
+      addDynamicsCompressor: false
     }
   },
   created () {
     this.recorderSrvc = new RecorderService()
-    this.recorderSrvc.config.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
     this.recorderSrvc.em.addEventListener('recording', (evt) => this.onNewRecording(evt))
   },
   watch: {
@@ -200,6 +205,8 @@ export default {
   },
   methods: {
     startRecording () {
+      this.recorderSrvc.config.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
+      this.recorderSrvc.config.createDynamicsCompressorNode = this.addDynamicsCompressor
       this.recorderSrvc.startRecording()
         .then(() => {
           this.recordingInProgress = true

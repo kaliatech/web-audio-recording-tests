@@ -14,6 +14,8 @@
           <li><span class="lbl">webkitAudioContext</span> : <span class="val">{{ webkitAudioContextStr }}</span></li>
           <li><span class="lbl">MediaRecorder</span> : <span class="val">{{ mediaRecorderOrigStr }}</span></li>
           <li><span class="lbl">AnalyserNode</span> : <span class="val">{{ analyserNode }}</span></li>
+          <li><span class="lbl">DynamicsCompressorNode</span> : <span class="val">{{ dynamicsCompressorNode }}</span>
+          </li>
         </ul>
       </v-flex>
     </v-layout>
@@ -129,6 +131,9 @@ export default {
     },
     analyserNode () {
       return typeof window.AnalyserNode
+    },
+    dynamicsCompressorNode () {
+      return typeof window.DynamicsCompressorNode
     },
     webkitAudioContextStr () {
       return typeof window.webkitAudioContext
