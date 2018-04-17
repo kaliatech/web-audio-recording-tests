@@ -12,6 +12,8 @@
         <ul>
           <li><span class="lbl">AudioContext</span> : <span class="val">{{ audioContextStr }}</span></li>
           <li><span class="lbl">webkitAudioContext</span> : <span class="val">{{ webkitAudioContextStr }}</span></li>
+          <li><span class="lbl">mediaDevices</span> : <span class="val">{{ mediaDevicesStr }}</span></li>
+          <li><span class="lbl">getUserMedia</span> : <span class="val">{{ getUserMediaStr }}</span></li>
           <li><span class="lbl">MediaRecorder</span> : <span class="val">{{ mediaRecorderOrigStr }}</span></li>
           <li><span class="lbl">AnalyserNode</span> : <span class="val">{{ analyserNode }}</span></li>
           <li><span class="lbl">DynamicsCompressorNode</span> : <span class="val">{{ dynamicsCompressorNode }}</span>
@@ -118,25 +120,25 @@ export default {
       enumeratedDevices: [],
       enumeratedDevicesPermissionNeeded: false,
       enumeratedDevicesPermissionRevokable: false,
+      getUserMediaStr: (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) ? true : false, // eslint-disable-line
+      mediaDevicesStr: navigator.mediaDevices ? true : false, // eslint-disable-line
       supportedMimeTypes: [],
-      mediaRecorderOrigStr: typeof window.MediaRecorder,
+      mediaRecorderOrigStr: navigator.MediaRecorder || false,
       supportedDeviceConstraints: []
     }
   },
   computed: {
     audioContextStr () {
-      // var AudioContext = window.AudioContext || window.webkitAudioContext;
-      // var audioCtx = new AudioContext();
-      return typeof window.AudioContext
+      return window.AudioContext ? true : false // eslint-disable-line
     },
     analyserNode () {
-      return typeof window.AnalyserNode
+      return window.AnalyserNode ? true : false  // eslint-disable-line
     },
     dynamicsCompressorNode () {
-      return typeof window.DynamicsCompressorNode
+      return window.DynamicsCompressorNode ?  true : false // eslint-disable-line
     },
     webkitAudioContextStr () {
-      return typeof window.webkitAudioContext
+      return window.webkitAudioContext ? true : false // eslint-disable-line
     }
   },
   mounted () {

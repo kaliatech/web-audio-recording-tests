@@ -46,6 +46,12 @@ export default class RecorderService {
       return
     }
 
+    // This is the case on ios/chrome, when clicking links from within ios/slack (sometimes), etc.
+    if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert('Missing support for navigator.mediaDevices.getUserMedia') // temp: helps when testing for strange issues on ios/safari
+      return
+    }
+
     this.audioCtx = new AudioContext()
     this.micGainNode = this.audioCtx.createGain()
     this.outputGainNode = this.audioCtx.createGain()
@@ -109,6 +115,10 @@ export default class RecorderService {
       .then((stream) => {
         this._startRecordingWithStream(stream, timeslice)
       })
+      .catch((error) => {
+        alert('Error with getUserMedia: ' + error.message) // temp: helps when testing for strange issues on ios/safari
+        console.log(error)
+      })
   }
 
   setMicGain (newGain) {
@@ -137,8 +147,6 @@ export default class RecorderService {
       this.micGainNode.connect(this.dynamicsCompressorNode)
       nextNode = this.dynamicsCompressorNode
     }
-
-    console.log('nextNode', nextNode)
 
     this.state = 'recording'
 
