@@ -122,12 +122,23 @@
           </li>
 
           <li><strong>Any references not cleaned up after recording complete can affect stability</strong> - <br>
-            UPDATED 2018-04-10: After writing the previous section, I rewrote a number of things and removed all
+            <p>UPDATED 2018-04-10: After writing the previous section, I rewrote a number of things and removed all
             dependencies. By doing that I was able to ensure that everything gets cleaned up when recording is
             complete. I now no longer have stability issues on iOS, though I don't know exactly what was causing
             it previously. I thought perhaps it was the web worker, which I now close when recording is complete. But
             quick testing shows that even if I don't close the webworker, this new handling seems to be stable after
-            sleep/lock/switch events.
+            sleep/lock/switch events.</p>
+          </li>
+
+          <li><strong>Mobile-web-app-capable meta might be causing issues</strong> - <br>
+            <p>
+            I haven't vetted this 100%, but before 11.3 release I thought the "Add to Home Screen" and launching as a
+            full screen web app using apple-mobile-web-app-capable tag worked fine. With 11.3 it no longer works. It
+            appears as if navigator.mediaDevices is missing completely when launched in this context. Similarly,
+            clicking links from apps like slack appears to launch in to a context without mediaDevices. Possibly related
+            <a
+              href="https://stackoverflow.com/questions/46228218/how-to-access-camera-on-ios11-home-screen-web-app/46350136">
+              link on StackOverflow</a>.</p>
           </li>
 
         </ul>
