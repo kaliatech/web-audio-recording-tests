@@ -2,12 +2,11 @@
   <v-container mb-5>
     <v-layout row wrap>
       <div class="test2">
-        <h3>Test 3
-            <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
-            <span v-if="!$vuetify.breakpoint.xsOnly"> - </span>
-            Script Processors w/ Peak Levels
+        <h3>Test 3 <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
+          <span v-if="!$vuetify.breakpoint.xsOnly"> - </span> Script Processors w/ Peak Levels
         </h3>
-        <p>Recording with multiple simultaneous script processors. In this case, showing peak levels of recording pre and post gain.</p>
+        <p>Recording with multiple simultaneous script processors. In this case, showing peak levels of recording pre
+          and post gain.</p>
         <div>
           <v-btn @click="startRecording" :disabled="recordingInProgress">Start Recording
           </v-btn>
@@ -75,10 +74,16 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test3.vue">src/views/Test3.vue</a>
+          <li>
+            <a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test3.vue">
+              src/views/Test3.vue
+            </a>
             <ul class="ml-3">
-              <li>Primarily: <a
-                href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a>
+              <li>Primarily:
+                <a
+                  href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">
+                  src/shared/RecorderService.js
+                </a>
               </li>
             </ul>
           </li>
@@ -91,19 +96,38 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/muaz-khan/RecordRTC/issues/324">https://github.com/muaz-khan/RecordRTC/issues/324</a>
+          <li>
+            <a href="https://github.com/muaz-khan/RecordRTC/issues/324">
+              https://github.com/muaz-khan/RecordRTC/issues/324
+            </a>
           </li>
-          <li><a href="https://github.com/ai/audio-recorder-polyfill/issues/4">https://github.com/ai/audio-recorder-polyfill/issues/4</a>
+          <li>
+            <a href="https://github.com/ai/audio-recorder-polyfill/issues/4">
+              https://github.com/ai/audio-recorder-polyfill/issues/4
+            </a>
           </li>
-          <li><a href="https://github.com/danielstorey/webrtc-audio-recording">https://github.com/danielstorey/webrtc-audio-recording</a>
+          <li>
+            <a href="https://github.com/danielstorey/webrtc-audio-recording">
+              https://github.com/danielstorey/webrtc-audio-recording
+            </a>
           </li>
-          <li><a href="https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/">https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/</a>
+          <li>
+            <a href="https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/">
+              https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/
+            </a>
           </li>
           <ul>
-            <li><a href="https://github.com/MicrosoftEdge/Demos/blob/master/microphone">https://github.com/MicrosoftEdge/Demos/blob/master/microphone</a>
+            <li>
+              <a href="https://github.com/MicrosoftEdge/Demos/blob/master/microphone">
+                https://github.com/MicrosoftEdge/Demos/blob/master/microphone
+              </a>
             </li>
           </ul>
-          <li><a href="https://github.com/esonderegger/web-audio-peak-meter">https://github.com/esonderegger/web-audio-peak-meter</a></li>
+          <li>
+            <a href="https://github.com/esonderegger/web-audio-peak-meter">
+              https://github.com/esonderegger/web-audio-peak-meter
+            </a>
+          </li>
         </ul>
       </div>
     </v-layout>

@@ -30,11 +30,11 @@ export default class WebAudioPeakMeter {
 
   getBaseLog = function (x, y) {
     return Math.log(y) / Math.log(x)
-  }
+  };
 
   dbFromFloat = function (floatVal) {
     return this.getBaseLog(10, floatVal) * 20
-  }
+  };
 
   setOptions = function (userOptions) {
     for (var k in userOptions) {
@@ -42,7 +42,7 @@ export default class WebAudioPeakMeter {
     }
     this.tickWidth = this.options.fontSize * 2.0
     this.meterTop = this.options.fontSize * 1.5 + this.options.borderSize
-  }
+  };
 
   createMeterNode = function (sourceNode, audioCtx) {
     var c = sourceNode.channelCount
@@ -50,7 +50,7 @@ export default class WebAudioPeakMeter {
     sourceNode.connect(meterNode)
     meterNode.connect(audioCtx.destination)
     return meterNode
-  }
+  };
 
   createContainerDiv = function (parent) {
     var meterElement = document.createElement('div')
@@ -60,7 +60,7 @@ export default class WebAudioPeakMeter {
     meterElement.style.backgroundColor = this.options.backgroundColor
     parent.appendChild(meterElement)
     return meterElement
-  }
+  };
 
   createMeter = function (domElement, meterNode, optionsOverrides) {
     this.setOptions(optionsOverrides)
@@ -96,7 +96,7 @@ export default class WebAudioPeakMeter {
         this.channelPeakLabels[i].textContent = '-∞'
       }
     }, false)
-  }
+  };
 
   createTicks = function (parent) {
     var numTicks = Math.floor(this.options.dbRange / this.options.dbTickSize)
@@ -115,7 +115,7 @@ export default class WebAudioPeakMeter {
       dbTickLabel -= this.options.dbTickSize
       dbTickTop += this.meterHeight / numTicks
     }
-  }
+  };
 
   createRainbow = function (parent, width, height, top, left) {
     var rainbow = document.createElement('div')
@@ -128,7 +128,7 @@ export default class WebAudioPeakMeter {
     var gradientStyle = 'linear-gradient(' + this.options.gradient.join(', ') + ')'
     rainbow.style.backgroundImage = gradientStyle
     return rainbow
-  }
+  };
 
   createPeakLabel = function (parent, width, left) {
     var label = document.createElement('div')
@@ -142,7 +142,7 @@ export default class WebAudioPeakMeter {
     label.style.left = left + 'px'
     label.textContent = '-∞'
     return label
-  }
+  };
 
   createChannelMask = function (parent, width, top, left, transition) {
     var channelMask = document.createElement('div')
@@ -157,7 +157,7 @@ export default class WebAudioPeakMeter {
       channelMask.style.transition = this.options.maskTransition
     }
     return channelMask
-  }
+  };
 
   maskSize = function (floatVal) {
     if (floatVal === 0.0) {
@@ -173,7 +173,7 @@ export default class WebAudioPeakMeter {
         return returnVal
       }
     }
-  }
+  };
 
   updateMeter = function (audioProcessingEvent) {
     var inputBuffer = audioProcessingEvent.inputBuffer

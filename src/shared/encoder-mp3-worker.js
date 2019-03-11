@@ -18,7 +18,7 @@ export default function () {
 
   function init (opts) {
     /* global lamejs */
-    importScripts(opts.baseUrl + '/workers/encoders/lame.min.js') // eslint-disable-line
+    importScripts(opts.baseUrl + '/workers/encoders/lame.min.js'); // eslint-disable-line
     mp3encoder = new lamejs.Mp3Encoder(channels, opts.sampleRate, kbps)
   }
 

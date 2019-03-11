@@ -197,7 +197,8 @@ export default {
 
     if (typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) {
       this.supportedMimeTypes.push({ name: 'none', supported: '(manual encoding required)' })
-    } else {
+    }
+    else {
       for (const i in types) {
         if (MediaRecorder.isTypeSupported(types[i])) {
           this.supportedMimeTypes.push({ name: types[i], supported: MediaRecorder.isTypeSupported(types[i]) })
@@ -224,7 +225,8 @@ export default {
           if (!device.label) {
             this.enumeratedDevicesPermissionNeeded = true
             availDevices.push('Input ' + idx + ' (' + device.deviceId + ')')
-          } else {
+          }
+          else {
             availDevices.push(device.label)
           }
         }

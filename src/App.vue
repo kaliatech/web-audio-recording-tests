@@ -32,7 +32,7 @@
             </v-list-tile-content>
           </v-list-tile>
 
-           <v-list-tile to="/test2">
+          <v-list-tile to="/test2">
             <v-list-tile-action>
               <v-icon>mic</v-icon>
             </v-list-tile-action>
@@ -102,7 +102,7 @@
         <v-toolbar-title>Web Audio Recording Tests</v-toolbar-title>
         <v-spacer></v-spacer>
         <a href="https://github.com/kaliatech/web-audio-recording-tests">
-        <v-icon large>code</v-icon>
+          <v-icon large>code</v-icon>
         </a>
       </v-toolbar>
       <v-content>

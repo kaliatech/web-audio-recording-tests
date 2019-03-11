@@ -3,10 +3,8 @@
     <v-layout row wrap>
 
       <div class="test2">
-        <h3>Test 5
-          <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
-          <span v-if="!$vuetify.breakpoint.xsOnly"> - </span>
-          Analyzer Node
+        <h3>Test 5 <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
+          <span v-if="!$vuetify.breakpoint.xsOnly"> - </span> Analyzer Node
         </h3>
         <p>Test using analyzer node.
         </p>
@@ -62,10 +60,16 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test5.vue">src/views/Test5.vue</a>
+          <li>
+            <a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test5.vue">
+              src/views/Test5.vue
+            </a>
             <ul class="ml-3">
-              <li>Primarily: <a
-                href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a>
+              <li>Primarily:
+                <a
+                  href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">
+                  src/shared/RecorderService.js
+                </a>
               </li>
             </ul>
           </li>
@@ -78,9 +82,14 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode">https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode</a>
+          <li>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode">
+              https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode
+            </a>
           </li>
-          <li><a href="http://webaudioapi.com/samples/visualizer/">http://webaudioapi.com/samples/visualizer/</a></li>
+          <li>
+            <a href="http://webaudioapi.com/samples/visualizer/">http://webaudioapi.com/samples/visualizer/</a>
+          </li>
         </ul>
       </div>
     </v-layout>

@@ -15,7 +15,7 @@ export default function () {
     // }
 
     // Unable to load min version. Not sure why.  Error in firefox is "The URI is malformed". Guessing related to the .mem.
-    importScripts(opts.baseUrl + '/workers/encoders/OggVorbisEncoder.js') // eslint-disable-line
+    importScripts(opts.baseUrl + '/workers/encoders/OggVorbisEncoder.js'); // eslint-disable-line
     oggEncoder = new OggVorbisEncoder(opts.sampleRate, channels, quality)
   }
 

@@ -32,7 +32,7 @@ module.exports = {
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // brace style
-    'brace-style':  ["warn", "1tbs"],
+    'brace-style':  ["warn", "stroustrup"],
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development

@@ -164,7 +164,8 @@ export default {
           if (!device.label) {
             this.enumeratedDevicesPermissionNeeded = true
             availDevices.push({ name: 'Audio Input ' + (availDevices.length + 1), device: device })
-          } else {
+          }
+          else {
             availDevices.push({ name: device.label, device: device })
           }
         }

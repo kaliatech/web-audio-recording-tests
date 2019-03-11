@@ -28,7 +28,7 @@ export default class RecorderService {
       micGain: 1.0,
       processorBufferSize: 2048,
       stopTracksAndCloseCtxWhenFinished: true,
-      userMediaConstraints: {audio: true}
+      userMediaConstraints: { audio: true }
     }
   }
 
@@ -86,12 +86,12 @@ export default class RecorderService {
         // This also works and avoids weirdness imports with workers
         // this.encoderWorker = new Worker(BASE_URL + '/workers/encoder-ogg-worker.js')
         this.encoderWorker = this.createWorker(EncoderMp3)
-        this.encoderWorker.postMessage(['init', {baseUrl: BASE_URL, sampleRate: this.audioCtx.sampleRate}])
+        this.encoderWorker.postMessage(['init', { baseUrl: BASE_URL, sampleRate: this.audioCtx.sampleRate }])
         this.encoderMimeType = 'audio/mpeg'
       }
       else if (this.config.manualEncoderId === 'ogg') {
         this.encoderWorker = this.createWorker(EncoderOgg)
-        this.encoderWorker.postMessage(['init', {baseUrl: BASE_URL, sampleRate: this.audioCtx.sampleRate}])
+        this.encoderWorker.postMessage(['init', { baseUrl: BASE_URL, sampleRate: this.audioCtx.sampleRate }])
         this.encoderMimeType = 'audio/ogg'
       }
       else {
@@ -104,7 +104,7 @@ export default class RecorderService {
           event.data = e.data
         }
         else {
-          event.data = new Blob(e.data, {type: this.encoderMimeType})
+          event.data = new Blob(e.data, { type: this.encoderMimeType })
         }
         this._onDataAvailable(event)
       })
@@ -291,7 +291,7 @@ export default class RecorderService {
       return
     }
 
-    let blob = new Blob(this.chunks, {'type': this.chunkType})
+    let blob = new Blob(this.chunks, { 'type': this.chunkType })
     let blobUrl = URL.createObjectURL(blob)
     const recording = {
       ts: new Date().getTime(),
@@ -345,7 +345,7 @@ export default class RecorderService {
       this.audioCtx = null
     }
 
-    this.em.dispatchEvent(new CustomEvent('recording', {detail: {recording: recording}}))
+    this.em.dispatchEvent(new CustomEvent('recording', { detail: { recording: recording } }))
   }
 
   _onError (evt) {
