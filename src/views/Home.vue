@@ -52,7 +52,7 @@ export default {
 </script>
 <style lang="stylus">
   .home--menu
-    button, a.btn
+    button, a.v-btn
       width: 20em
 
   .home--menu .btn__content

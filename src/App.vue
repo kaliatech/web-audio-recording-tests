@@ -106,7 +106,7 @@
         </a>
       </v-toolbar>
       <v-content>
-        <v-container fluid class="scroll-container">
+        <v-container fluid class="container">
           <div mb-5>
             <router-view></router-view>
           </div>
