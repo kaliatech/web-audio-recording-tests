@@ -3,10 +3,8 @@
     <v-layout row wrap>
 
       <div class="test2">
-        <h3>Test 6
-          <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
-          <span v-if="!$vuetify.breakpoint.xsOnly"> - </span>
-          In-browser Encoding
+        <h3>Test 6 <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
+          <span v-if="!$vuetify.breakpoint.xsOnly"> - </span> In-browser Encoding
         </h3>
         <p>Tests to verify encoding capabilities <em>while</em> recording. Note that for this test, the native
           MediaRecorder is disabled even on browsers that have it.</p>
@@ -25,8 +23,8 @@
     <v-layout row wrap class="ml-1 mt-1" v-if="hasMediaRecorder">
       <div>
         <v-alert type="error" value="true">
-          This test only makes sense on browsers that don't have a native MediaRecorder. It would be possible
-          to use a manual encoder on other browsers, but this test isn't written to support it.
+          This test only makes sense on browsers that don't have a native MediaRecorder. It would be possible to use a
+          manual encoder on other browsers, but this test isn't written to support it.
         </v-alert>
       </div>
     </v-layout>
@@ -86,22 +84,21 @@
         <p>
           This is important mostly for safari/edge or any browser without native MediaRecorder support. Without native
           encoding, most encoding implementations encode the incoming audio stream to uncompressed PCM audio/wav.
-          However, this
-          significantly limits the duration of the recording due to memory constraints. And if not encoded before
-          upload,
-          the upload is significantly larger than it would be if using a compressed encoding. Encoding the wav
-          data after recording, before uploading, is relatively straightforward. This test is specifically to test
-          encoding
-          <em>while</em> recording.
+          However, this significantly limits the duration of the recording due to memory constraints. And if not encoded
+          before upload, the upload is significantly larger than it would be if using a compressed encoding. Encoding
+          the wav data after recording, before uploading, is relatively straightforward. This test is specifically to
+          test encoding <em>while</em> recording.
         </p>
         <p>
-          This test uses web workers to do the encoding. Check out <a
-          href="https://higuma.github.io/ogg-vorbis-encoder-js/">this demo</a> for testing encoding with and without
-          workers.
+          This test uses web workers to do the encoding. Check out
+          <a
+            href="https://higuma.github.io/ogg-vorbis-encoder-js/">this demo
+          </a>
+          for testing encoding with and without workers.
         </p>
         <p>
-          If using ogg encoder, the resulting recordings will not playback on ios/safari because it doesn't support
-          the format natively. Also, I was unable to get the minified version (~800k) of the ogg encoder to work. The
+          If using ogg encoder, the resulting recordings will not playback on ios/safari because it doesn't support the
+          format natively. Also, I was unable to get the minified version (~800k) of the ogg encoder to work. The
           unminified version currently used in this test is ~2.3MB (or ~400k gzipped).
         </p>
 
@@ -113,10 +110,16 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test5.vue">src/views/Test5.vue</a>
+          <li>
+            <a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test5.vue">
+              src/views/Test5.vue
+            </a>
             <ul class="ml-3">
-              <li>Primarily: <a
-                href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a>
+              <li>Primarily:
+                <a
+                  href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">
+                  src/shared/RecorderService.js
+                </a>
               </li>
             </ul>
           </li>
@@ -129,13 +132,21 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/zhuker/lamejs">https://github.com/zhuker/lamejs</a></li>
-          <li><a href="https://github.com/zhuker/lamejs/pull/17">https://github.com/zhuker/lamejs/pull/17</a></li>
-          <li><a
-            href="https://higuma.github.io/ogg-vorbis-encoder-js/">https://higuma.github.io/ogg-vorbis-encoder-js/</a>
+          <li>
+            <a href="https://github.com/zhuker/lamejs">https://github.com/zhuker/lamejs</a>
+          </li>
+          <li>
+            <a href="https://github.com/zhuker/lamejs/pull/17">https://github.com/zhuker/lamejs/pull/17</a>
+          </li>
+          <li>
+            <a
+              href="https://higuma.github.io/ogg-vorbis-encoder-js/">https://higuma.github.io/ogg-vorbis-encoder-js/
+            </a>
             <ul>
-              <li><a
-                href="https://github.com/higuma/ogg-vorbis-encoder-js">https://github.com/higuma/ogg-vorbis-encoder-js</a>
+              <li>
+                <a
+                  href="https://github.com/higuma/ogg-vorbis-encoder-js">https://github.com/higuma/ogg-vorbis-encoder-js
+                </a>
               </li>
             </ul>
 
@@ -153,9 +164,9 @@ import RecorderService from '@/shared/RecorderService'
 import utils from '@/shared/Utils'
 
 const encoders = [
-  {id: 'wav', name: 'audio/wav - custom - mono'},
-  {id: 'mp3', name: 'audio/mpeg - zhuker/lamejs - mono/128kbps'},
-  {id: 'ogg', name: 'audio/ogg - higuma/oggjs - mono/~128kps'}
+  { id: 'wav', name: 'audio/wav - custom - mono' },
+  { id: 'mp3', name: 'audio/mpeg - zhuker/lamejs - mono/128kbps' },
+  { id: 'ogg', name: 'audio/ogg - higuma/oggjs - mono/~128kps' }
 ]
 
 export default {

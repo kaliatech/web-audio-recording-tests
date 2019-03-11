@@ -84,25 +84,50 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a
-            href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API</a>
+          <li>
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API">
+              https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API
+            </a>
           </li>
-          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints">https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints</a>
+          <li>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints">
+              https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints
+            </a>
           </li>
-          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API</a>
+          <li>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">
+              https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API
+            </a>
           </li>
-          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API">https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API</a>
+          <li>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API">
+              https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API
+            </a>
           </li>
-          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices">https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices</a>
+          <li>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices">
+              https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices
+            </a>
           </li>
-          <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API">https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API</a>
+          <li>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API">
+              https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API
+            </a>
           </li>
-          <li><a href="https://www.w3.org/TR/webaudio/">https://www.w3.org/TR/webaudio/</a></li>
+          <li>
+            <a href="https://www.w3.org/TR/webaudio/">https://www.w3.org/TR/webaudio/</a>
+          </li>
         </ul>
         <br>
         <ul>
-          <li><a href="https://webrtc.github.io/samples/">https://webrtc.github.io/samples/</a></li>
-          <li><a href="https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/">https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/</a>
+          <li>
+            <a href="https://webrtc.github.io/samples/">https://webrtc.github.io/samples/</a>
+          </li>
+          <li>
+            <a href="https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/">
+              https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/microphone/
+            </a>
           </li>
         </ul>
       </div>
@@ -135,7 +160,7 @@ export default {
       return window.AnalyserNode ? true : false  // eslint-disable-line
     },
     dynamicsCompressorNode () {
-      return window.DynamicsCompressorNode ?  true : false // eslint-disable-line
+      return window.DynamicsCompressorNode ? true : false // eslint-disable-line
     },
     webkitAudioContextStr () {
       return window.webkitAudioContext ? true : false // eslint-disable-line
@@ -171,12 +196,11 @@ export default {
       'video/mp4']
 
     if (typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) {
-      this.supportedMimeTypes.push({name: 'none', supported: '(manual encoding required)'})
-    }
-    else {
+      this.supportedMimeTypes.push({ name: 'none', supported: '(manual encoding required)' })
+    } else {
       for (const i in types) {
         if (MediaRecorder.isTypeSupported(types[i])) {
-          this.supportedMimeTypes.push({name: types[i], supported: MediaRecorder.isTypeSupported(types[i])})
+          this.supportedMimeTypes.push({ name: types[i], supported: MediaRecorder.isTypeSupported(types[i]) })
         }
       }
     }
@@ -200,8 +224,7 @@ export default {
           if (!device.label) {
             this.enumeratedDevicesPermissionNeeded = true
             availDevices.push('Input ' + idx + ' (' + device.deviceId + ')')
-          }
-          else {
+          } else {
             availDevices.push(device.label)
           }
         }
@@ -216,13 +239,13 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          this.enumeratedDevices.push({id: '-', kind: 'error', deviceId: 'error'})
+          this.enumeratedDevices.push({ id: '-', kind: 'error', deviceId: 'error' })
         })
     },
     requestDevicePermissions () {
       // this.enumeratedDevices.forEach((device) => {
       // })
-      navigator.mediaDevices.getUserMedia({audio: true})
+      navigator.mediaDevices.getUserMedia({ audio: true })
         .then((stream) => {
           console.log('stream', stream)
 
@@ -238,26 +261,26 @@ export default {
           console.log('tracks', tracks)
           tracks.forEach((track, trackIdx) => {
             let th = 'track[' + trackIdx + '].'
-            d.push({name: th + 'label', text: track.label})
-            d.push({name: th + 'kind', text: track.kind})
-            d.push({name: th + 'muted', text: track.muted})
+            d.push({ name: th + 'label', text: track.label })
+            d.push({ name: th + 'kind', text: track.kind })
+            d.push({ name: th + 'muted', text: track.muted })
 
             let constraints = track.getConstraints()
             console.log('constraints', constraints)
             for (let key in constraints) {
-              d.push({name: th + 'constr[' + key + ']', text: constraints[key]})
+              d.push({ name: th + 'constr[' + key + ']', text: constraints[key] })
             }
 
             let capabilities = track.getCapabilities()
             console.log('capabilities', capabilities)
             for (let key in capabilities) {
-              d.push({name: th + 'capab[' + key + ']', text: capabilities[key]})
+              d.push({ name: th + 'capab[' + key + ']', text: capabilities[key] })
             }
 
             let settings = track.getSettings()
             console.log('settings', settings)
             for (let key in settings) {
-              d.push({name: th + 'settings[' + key + ']', text: settings[key]})
+              d.push({ name: th + 'settings[' + key + ']', text: settings[key] })
             }
           })
         })

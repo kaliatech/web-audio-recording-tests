@@ -3,15 +3,13 @@
     <v-layout row wrap>
 
       <div class="test2">
-        <h3>Test 4
-          <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
-          <span v-if="!$vuetify.breakpoint.xsOnly"> - </span>
-          Microphone Selection
+        <h3>Test 4 <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
+          <span v-if="!$vuetify.breakpoint.xsOnly"> - </span> Microphone Selection
         </h3>
         <p>Test microphone input selection. See
           <router-link to="/diagnostics">diagnostics</router-link>
-          for full enumeration and capabilities. Showing
-          microphone labels first requires permissions to an input device. Click eye icon to show microphone labels.
+          for full enumeration and capabilities. Showing microphone labels first requires permissions to an input
+          device. Click eye icon to show microphone labels.
         </p>
       </div>
     </v-layout>
@@ -80,10 +78,16 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test4.vue">src/views/Test4.vue</a>
+          <li>
+            <a href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/views/Test4.vue">
+              src/views/Test4.vue
+            </a>
             <ul class="ml-3">
-              <li>Primarily: <a
-                href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">src/shared/RecorderService.js</a>
+              <li>Primarily:
+                <a
+                  href="https://github.com/kaliatech/web-audio-recording-tests/blob/master/src/shared/RecorderService.js">
+                  src/shared/RecorderService.js
+                </a>
               </li>
             </ul>
           </li>
@@ -96,7 +100,10 @@
       <v-divider></v-divider>
       <div class="ml-4">
         <ul>
-          <li><a href="https://webrtc.github.io/samples/src/content/devices/input-output/">https://webrtc.github.io/samples/src/content/devices/input-output/</a>
+          <li>
+            <a href="https://webrtc.github.io/samples/src/content/devices/input-output/">
+              https://webrtc.github.io/samples/src/content/devices/input-output/
+            </a>
           </li>
         </ul>
       </div>
@@ -136,7 +143,7 @@ export default {
   },
   methods: {
     startRecording () {
-      this.recorderSrvc.config.userMediaConstraints = {audio: {deviceId: this.selectedDevice.device.deviceId}}
+      this.recorderSrvc.config.userMediaConstraints = { audio: { deviceId: this.selectedDevice.device.deviceId } }
       this.recorderSrvc.startRecording()
         .then(() => {
           this.recordingInProgress = true
@@ -156,10 +163,9 @@ export default {
         if (device.kind === 'audioinput') {
           if (!device.label) {
             this.enumeratedDevicesPermissionNeeded = true
-            availDevices.push({name: 'Audio Input ' + (availDevices.length + 1), device: device})
-          }
-          else {
-            availDevices.push({name: device.label, device: device})
+            availDevices.push({ name: 'Audio Input ' + (availDevices.length + 1), device: device })
+          } else {
+            availDevices.push({ name: device.label, device: device })
           }
         }
       })
@@ -178,11 +184,11 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          this.enumeratedDevices.push({id: '-', kind: 'error', deviceId: 'error'})
+          this.enumeratedDevices.push({ id: '-', kind: 'error', deviceId: 'error' })
         })
     },
     enumerateDevicesWithPermission () {
-      navigator.mediaDevices.getUserMedia({audio: true, deviceId: 'default'})
+      navigator.mediaDevices.getUserMedia({ audio: true, deviceId: 'default' })
         .then((stream) => {
           this.enumerateDevices()
           this.stream = stream

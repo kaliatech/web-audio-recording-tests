@@ -4,15 +4,13 @@ let gitRevisionPlugin = new GitRevisionPlugin()
 
 module.exports = {
   lintOnSave: true,
+  publicPath: '',
   devServer: {
     https: true,
     disableHostCheck: true,
     port: 8443
   },
   configureWebpack: config => {
-    if (process.env.NODE_ENV === 'production') {
-      config.output.publicPath = ''
-    }
     // config.plugins.push(new DefinePlugin({
     //   'VERSION': JSON.stringify(gitRevisionPlugin.version()),
     //   'COMMITHASH': JSON.stringify(gitRevisionPlugin.commithash()),
@@ -45,7 +43,7 @@ module.exports = {
       else {
         Object.assign(options[0], {
           //'BASE_URL': JSON.stringify('https://localhost:8443'),
-          'BASE_URL': JSON.stringify('https://10.9.22.161:8443'),
+          'BASE_URL': JSON.stringify('https://10.9.22.176:8443'),
         })
       }
       return options
