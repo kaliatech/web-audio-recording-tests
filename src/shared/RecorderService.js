@@ -15,8 +15,6 @@ export default class RecorderService {
     this.chunks = []
     this.chunkType = ''
 
-    this.usingMediaRecorder = window.MediaRecorder || false
-
     this.encoderMimeType = 'audio/wav'
 
     this.config = {
@@ -28,6 +26,7 @@ export default class RecorderService {
       micGain: 1.0,
       processorBufferSize: 2048,
       stopTracksAndCloseCtxWhenFinished: true,
+      usingMediaRecorder: window.MediaRecorder || false,
       userMediaConstraints: { audio: true }
     }
   }
@@ -67,7 +66,7 @@ export default class RecorderService {
     // If not using MediaRecorder(i.e. safari and edge), then a script processor is required. It's optional
     // on browsers using MediaRecorder and is only useful if wanting to do custom analysis or manipulation of
     // recorded audio data.
-    if (this.config.forceScriptProcessor || this.config.broadcastAudioProcessEvents || !this.usingMediaRecorder) {
+    if (this.config.forceScriptProcessor || this.config.broadcastAudioProcessEvents || !this.config.usingMediaRecorder) {
       this.processorNode = this.audioCtx.createScriptProcessor(this.config.processorBufferSize, 1, 1) // TODO: Get the number of channels from mic
     }
 
@@ -81,7 +80,7 @@ export default class RecorderService {
     }
 
     // Create web worker for doing the encoding
-    if (!this.usingMediaRecorder) {
+    if (!this.config.usingMediaRecorder) {
       if (this.config.manualEncoderId === 'mp3') {
         // This also works and avoids weirdness imports with workers
         // this.encoderWorker = new Worker(BASE_URL + '/workers/encoder-ogg-worker.js')
@@ -169,7 +168,7 @@ export default class RecorderService {
 
     this.outputGainNode.connect(this.destinationNode)
 
-    if (this.usingMediaRecorder) {
+    if (this.config.usingMediaRecorder) {
       this.mediaRecorder = new MediaRecorder(this.destinationNode.stream)
       this.mediaRecorder.addEventListener('dataavailable', (evt) => this._onDataAvailable(evt))
       this.mediaRecorder.addEventListener('error', (evt) => this._onError(evt))
@@ -246,7 +245,7 @@ export default class RecorderService {
 
     // Safari and Edge require manual encoding via web worker. Single channel only for now.
     // Example stereo encoderWav: https://github.com/MicrosoftEdge/Demos/blob/master/microphone/scripts/recorderworker.js
-    if (!this.usingMediaRecorder) {
+    if (!this.config.usingMediaRecorder) {
       if (this.state === 'recording') {
         if (this.config.broadcastAudioProcessEvents) {
           this.encoderWorker.postMessage(['encode', e.outputBuffer.getChannelData(0)])
@@ -262,7 +261,7 @@ export default class RecorderService {
     if (this.state === 'inactive') {
       return
     }
-    if (this.usingMediaRecorder) {
+    if (this.mediaRecorder) {
       this.state = 'inactive'
       this.mediaRecorder.stop()
     }

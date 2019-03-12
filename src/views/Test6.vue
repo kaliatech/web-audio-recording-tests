@@ -42,6 +42,7 @@
             label="Select Encoder"
             single-line
             item-text="name"
+            item-value="id"
             :disabled="recordingInProgress"
           >
           </v-select>
@@ -180,7 +181,7 @@ export default {
     return {
       encoders: encoders,
       hasMediaRecorder: window.MediaRecorder || false,
-      selectedEncoder: encoders[0],
+      selectedEncoder: encoders[0].id,
       recordingInProgress: false,
       recordings: []
     }
@@ -199,7 +200,7 @@ export default {
   },
   methods: {
     startRecording () {
-      this.recorderSrvc.config.manualEncoderId = this.selectedEncoder.id
+      this.recorderSrvc.config.manualEncoderId = this.selectedEncoder
       this.recorderSrvc.startRecording()
         .then(() => {
           this.recordingInProgress = true
