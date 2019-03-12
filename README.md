@@ -7,6 +7,5 @@ that are not important for doing basic stable recording. A simpler version, usin
 here:
 * https://github.com/kaliatech/web-audio-recording-tests-simpler
 
-
 ### Screenshot<br>
 ![Screenshot](docs/scrshot-test1b.png?raw=true)
