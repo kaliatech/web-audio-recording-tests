@@ -9,4 +9,4 @@ here:
 
 
 ### Screenshot<br>
-![Screenshot](/images/logo.png?raw=true)
+![Screenshot](docs/scrshot-test1b.png?raw=true)
