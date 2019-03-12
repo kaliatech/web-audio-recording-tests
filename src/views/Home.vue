@@ -6,10 +6,8 @@
       <v-flex md6>
         <div class="text-xs-center home--menu">
           <p>
-            Tests to verify functionality of web audio <strong>recording</strong> across all browsers. Particularly on
-            iOS/Safari 11.2.x as it is very strict on security context and has
-            <del>bugs</del>
-            <em>special features</em>.
+            Tests to verify functionality of web audio API <strong>recording</strong> across all browsers, especially
+            iOS/Safari.
           </p>
 
           <div>

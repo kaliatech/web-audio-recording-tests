@@ -1,3 +1,5 @@
+/* Copyright (c) 2019 Josh Sanderson */
+
 import EncoderWav from './encoder-wav-worker.js'
 import EncoderMp3 from './encoder-mp3-worker.js'
 import EncoderOgg from './encoder-ogg-worker.js'
@@ -271,7 +273,7 @@ export default class RecorderService {
     if (this.state === 'inactive') {
       return
     }
-    if (this.mediaRecorder) {
+    if (this.config.usingMediaRecorder) {
       this.state = 'inactive'
       this.mediaRecorder.stop()
     }
