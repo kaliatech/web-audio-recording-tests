@@ -5,8 +5,7 @@
         <h3>Test 1 <span v-if="$vuetify.breakpoint.xsOnly"><br></span>
           <span v-if="!$vuetify.breakpoint.xsOnly"> - </span> Repeatable Recording &amp; Playback
         </h3>
-        <p>Click start/stop multiple times to create multiple recordings. Works on all modern browser/device
-          combinations, including iOS/Safari 11.2.x and newer.</p>
+        <p>Click start/stop multiple times to create multiple recordings.</p>
         <div>
           <v-btn @click="startRecording" :disabled="recordingInProgress">Start Recording
           </v-btn>
@@ -34,6 +33,11 @@
       <v-checkbox v-model="cleanupWhenFinished"
                   label="Stop tracks and close audio context when recording stopped"></v-checkbox>
     </v-layout>
+    <v-layout row wrap class="ml-1 mt-1">
+      <v-checkbox v-model="enableEchoCancellation"
+                  label="Enable echo cancellation">
+      </v-checkbox>
+    </v-layout>
     <v-layout column wrap v-if="recordings.length > 0">
       <h4 class="mt-3">Recordings</h4>
       <div v-for="(recording,idx) in recordings" :key="recording.ts">
@@ -45,7 +49,7 @@
               </div>
               <div class="ml-3">
                 <div>
-                  <audio :src="recording.blobUrl" controls="true"/>
+                  <audio :src="recording.blobUrl" :type="recording.mimeType" controls="true"/>
                 </div>
                 <div>
                   size: {{recording.size | fileSizeToHumanSize}}, type: {{recording.mimeType}}
@@ -205,6 +209,7 @@ export default {
   },
   data () {
     return {
+      enableEchoCancellation: true,
       recordingInProgress: false,
       supportedMimeTypes: [],
       recordings: [],
@@ -231,6 +236,7 @@ export default {
     startRecording () {
       this.recorderSrvc.config.stopTracksAndCloseCtxWhenFinished = this.cleanupWhenFinished
       this.recorderSrvc.config.createDynamicsCompressorNode = this.addDynamicsCompressor
+      this.recorderSrvc.config.enableEchoCancellation = this.enableEchoCancellation
       this.recorderSrvc.startRecording()
         .then(() => {
           this.recordingInProgress = true
@@ -259,6 +265,9 @@ export default {
   @media screen and (max-width: ($grid-breakpoints.sm - 1))
     audio
       width 100%
+
+  .v-input--selection-controls
+    margin 0
 
   .live
     color red

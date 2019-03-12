@@ -26,8 +26,8 @@ export default class RecorderService {
       micGain: 1.0,
       processorBufferSize: 2048,
       stopTracksAndCloseCtxWhenFinished: true,
-      usingMediaRecorder: window.MediaRecorder || false,
-      userMediaConstraints: { audio: true }
+      usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
+      enableEchoCancellation: true
     }
   }
 
@@ -109,8 +109,18 @@ export default class RecorderService {
       })
     }
 
+    // Setup media constraints
+    const userMediaConstraints = {
+      audio: {
+        echoCancellation: this.config.enableEchoCancellation
+      }
+    }
+    if (this.config.deviceId) {
+      userMediaConstraints.audio.deviceId = this.config.deviceId
+    }
+
     // This will prompt user for permission if needed
-    return navigator.mediaDevices.getUserMedia(this.config.userMediaConstraints)
+    return navigator.mediaDevices.getUserMedia(userMediaConstraints)
       .then((stream) => {
         this._startRecordingWithStream(stream, timeslice)
       })

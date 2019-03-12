@@ -143,7 +143,7 @@ export default {
   },
   methods: {
     startRecording () {
-      this.recorderSrvc.config.userMediaConstraints = { audio: { deviceId: this.selectedDevice.device.deviceId } }
+      this.recorderSrvc.config.deviceId = this.selectedDevice.device.deviceId
       this.recorderSrvc.startRecording()
         .then(() => {
           this.recordingInProgress = true
