@@ -6,9 +6,11 @@ module.exports = {
   lintOnSave: true,
   publicPath: '',
   devServer: {
+    host: "0.0.0.0",
     https: true,
     disableHostCheck: true,
-    port: 8443
+    port: 8443,
+    public: '10.9.22.176:8443',
   },
   configureWebpack: config => {
     // config.plugins.push(new DefinePlugin({
@@ -34,7 +36,7 @@ module.exports = {
       })
 
       // There has got to be a better way...
-      // Currently need this for loading the webworkers which have different rules and restrictions
+      // Currently this is required for loading the webworkers which have different rules and restrictions.
       if (process.env.NODE_ENV === 'production') {
         Object.assign(options[0], {
           'BASE_URL': JSON.stringify('https://kaliatech.github.io/web-audio-recording-tests/dist'),
@@ -43,7 +45,7 @@ module.exports = {
       else {
         Object.assign(options[0], {
           //'BASE_URL': JSON.stringify('https://localhost:8443'),
-          'BASE_URL': JSON.stringify('https://10.9.22.176:8443'),
+          'BASE_URL': JSON.stringify('https://10.9.22.176:8443')
         })
       }
       return options
