@@ -18,11 +18,11 @@
       <v-flex xs9 md6>
         <v-select
           :items="availableDevices"
-          v-model="selectedDevice"
+          v-model="selectedDeviceId"
           label="Select Mic"
           single-line
           item-text="name"
-          item-value="deviceId"
+          item-value="device.deviceId"
         >
           <!--          <template slot="item" slot-scope="data">
                       {{data.item.name}}
@@ -127,7 +127,7 @@ export default {
     return {
       availableDevices: [],
       enumeratedDevices: [],
-      selectedDevice: null,
+      selectedDeviceId: null,
       recordingInProgress: false,
       recordings: [],
       microphones: []
@@ -143,7 +143,7 @@ export default {
   },
   methods: {
     startRecording () {
-      this.recorderSrvc.config.deviceId = this.selectedDevice.device.deviceId
+      this.recorderSrvc.config.deviceId = this.selectedDeviceId
       this.recorderSrvc.startRecording()
         .then(() => {
           this.recordingInProgress = true
@@ -177,7 +177,9 @@ export default {
         .then((devices) => {
           this.enumeratedDevices = devices
           this.setupAvailDeviceNames()
-          this.selectedDevice = this.availableDevices[0]
+          if (this.availableDevices && this.availableDevices.length > 1 && this.availableDevices[0].device) {
+            this.selectedDeviceId = this.availableDevices[0].device.deviceId
+          }
           if (this.stream) {
             this.stream.getTracks().forEach((track) => track.stop())
             this.stream = null
