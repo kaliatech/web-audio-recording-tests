@@ -14,7 +14,7 @@
           <li><span class="lbl">webkitAudioContext</span> : <span class="val">{{ webkitAudioContextStr }}</span></li>
           <li><span class="lbl">mediaDevices</span> : <span class="val">{{ mediaDevicesStr }}</span></li>
           <li><span class="lbl">getUserMedia</span> : <span class="val">{{ getUserMediaStr }}</span></li>
-          <li><span class="lbl">MediaRecorder</span> : <span class="val">{{ mediaRecorderOrigStr }}</span></li>
+          <li><span class="lbl">MediaRecorder</span> : <span class="val">{{ hasMediaRecorder }}</span></li>
           <li><span class="lbl">AnalyserNode</span> : <span class="val">{{ analyserNode }}</span></li>
           <li><span class="lbl">DynamicsCompressorNode</span> : <span class="val">{{ dynamicsCompressorNode }}</span>
           </li>
@@ -148,7 +148,7 @@ export default {
       getUserMediaStr: (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) ? true : false, // eslint-disable-line
       mediaDevicesStr: navigator.mediaDevices ? true : false, // eslint-disable-line
       supportedMimeTypes: [],
-      mediaRecorderOrigStr: navigator.MediaRecorder || false,
+      hasMediaRecorder: typeof window.MediaRecorder !== 'undefined',
       supportedDeviceConstraints: []
     }
   },
