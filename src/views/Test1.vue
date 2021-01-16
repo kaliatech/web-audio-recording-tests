@@ -64,6 +64,18 @@
 
     <v-layout column wrap class="mt-5">
       <h4>Notes
+        <small>(as of iOS 14.3)</small>
+      </h4>
+      <v-divider></v-divider>
+      <p>
+        As of 14.3, iOS appears to have a full MediaRecorder implementation. These tests use feature detection, and now
+        use MediaRecorder on iOS. I have not done extensive testing, but all of these tests seems to work on latest iOS.
+      </p>
+      <p>
+        This makes many of the notes below no longer relevant.
+      </p>
+
+      <h4>Notes
         <small>(as of iOS 11.2.6)</small>
       </h4>
       <v-divider></v-divider>

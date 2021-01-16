@@ -7,7 +7,7 @@
         <div class="text-xs-center home--menu">
           <p>
             Tests to verify functionality of web audio API <strong>recording</strong> across all browsers, especially
-            iOS/Safari.
+            iOS/Safari. This was created before iOS had native MediaRecorder support, which was added in ~iOS 14.3.
           </p>
 
           <div>

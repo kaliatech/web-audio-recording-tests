@@ -85,6 +85,11 @@
       <div class="ml-4">
         <ul>
           <li>
+            <a href="https://caniuse.com/mediarecorder">
+              https://caniuse.com/mediarecorder
+            </a>
+          </li>
+          <li>
             <a
               href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API">
               https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API
